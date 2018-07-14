@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+ {%- include head.html -%}
+  <body>
+    {%- include header.html -%}
+    <div id="content" class="writable">
+      <div id="blank-title">
+        <div id="position-article-title">
+          <div id="article-title">
+            {% if page.title %}
+              <h1 class="super-title">{{ page.title }}</h1>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div id="position-side-info">
+        <div id="position-side-info-right">
+          <div id="side-info" class="auto-overflow">
+            {% if page.isAbout %}
+              <div id="side-about">
+                <h4>Follow me on:</h4>
+                <div id="follow-media">
+                  {% if site.twitter_url %}
+                    <div class="follow_account">
+                      <a class='link' href="{{ site.twitter_url }}">
+                        <p>Twitter</p>
+                        <img src="assets/img/twi.png" alt="twitter_img">
+                      </a>
+                    </div>
+                  {% endif %}
+                  {% if site.github_url %}
+                    <div class="follow_account">
+                      <a class='link' href="{{ site.github_url }}">
+                        <p>GitHub</p>
+                        <img src="assets/img/git.png" alt="github_img">
+                      </a>
+                    </div>
+                  {% endif %}
+                  {% if site.linkedin_url %}
+                    <div class="follow_account">
+                      <a class='link' href="{{ site.linkedin_url }}">
+                        <p>LinkedIn</p>
+                        <img src="assets/img/lin.png" alt="linkedin_img">
+                      </a>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              {% if page.date %}
+                <p id="side-date">{{ page.date | date: "%B %e, %Y" }}</p>
+              {% endif %}
+              {% if page.author %}
+                <p id="side-author">By: {{ page.author }}</p>
+              {% endif %}
+              {% if page.categories %}
+                <p id="side-category">Category:
+                  {% for category in page.categories %}
+                    <br> {{ category }}
+                  {% endfor %}
+                </p>
+              {% endif %}
+              {% if page.info %}
+                <p id="side-text">{{ page.info }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div id="position-article-content">
+        <div id="article-content">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+    {%- include footer.html -%}
+  </body>
+</html>
