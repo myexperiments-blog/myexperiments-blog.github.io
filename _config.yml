@@ -18,7 +18,7 @@ email: abrunet01@gmail.com
 description: "A blog about IT Security experiments"
 keywords: "it,security,blog,cyber,experiments,it security blog,it blog"
 
-baseurl: "https://myexperiments.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://myexperiments.io"
 
 twitter_url: L0vvebug
 github_url:  L0v3bug
