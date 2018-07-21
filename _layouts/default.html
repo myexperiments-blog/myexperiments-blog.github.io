@@ -54,14 +54,14 @@
                 <p id="side-author">By: {{ page.author }}</p>
               {% endif %}
               {% if page.categories %}
-                <p id="side-category">Category:
+                <p id="side-category">Categories:
                   {% for category in page.categories %}
                     <br> {{ category }}
                   {% endfor %}
                 </p>
               {% endif %}
-              {% if page.info %}
-                <p id="side-text">{{ page.info }}</p>
+              {% if page.description %}
+                <p id="side-text">{{ page.description }}</p>
               {% endif %}
             {% endif %}
           </div>

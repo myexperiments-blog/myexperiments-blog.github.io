@@ -9,27 +9,32 @@ body {
   margin: 0;
   padding: 0;
   font-size: 30px;
+  color: var(--color-article-title);
 }
 
 h1 {
   font-size: 25px;
+  color: var(--color-major-title);
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 18px;
+  color: var(--color-important-title);
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 15px;
+  color: var(--color-medium-title);
 }
 
 h4 {
-  font-size: 16px;
+  font-size: 15px;
+  color: var(--color-minim-title);
 }
 
 h5 {
-  font-size: 16px;
-  font-style: oblique;
+  font-size: 15px;
+  color: var(--color-minor-title);
 }
 
 .noselect {
@@ -40,6 +45,11 @@ h5 {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
 }
 
 .auto-overflow {

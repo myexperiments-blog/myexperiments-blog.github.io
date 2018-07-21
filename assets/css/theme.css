@@ -4,4 +4,11 @@
   --color-link: #0366d6;
   --color-link-hover: #005b96;
   --color-info: #828282;
+
+  --color-article-title: #005b96;
+  --color-major-title: #004080;
+  --color-important-title: #00415a;
+  --color-medium-title: #353a41;
+  --color-minim-title: #6a7481;
+  --color-minor-title: #a8afb8;
 }

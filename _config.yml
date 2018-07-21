@@ -28,3 +28,4 @@ linkedin_url: antoine-brunet-44b3bb13b
 markdown: kramdown
 safe: true
 encoding: utf-8
+timezone: America/New_York
