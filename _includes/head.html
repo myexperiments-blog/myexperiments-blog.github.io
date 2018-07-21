@@ -17,12 +17,4 @@
   <link rel="stylesheet" href="{{ "/assets/css/theme.css" | relative_url }}">
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
   <link rel="stylesheet" href="{{ "/assets/css/highlight.css" | relative_url }}">
-  {% if site.domain %}
-    <script>
-      var host = "{{ site.domain }}"
-      if (window.location.host == host && window.location.protocol != "https:") {
-        window.location.protocol = "https:"
-      }
-    </script>
-  {% endif %}
 </head>
