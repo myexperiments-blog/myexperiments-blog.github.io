@@ -19,7 +19,7 @@ description: "A blog about IT Security experiments"
 keywords: "it,security,blog,cyber,experiments,it security blog,it blog"
 
 domain: "myexperiments.io"
-url: "https://myexperiments.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "https://myexperiments.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 twitter_url: L0vvebug
 github_url:  L0v3bug
@@ -27,3 +27,5 @@ linkedin_url: antoine-brunet-44b3bb13b
 
 # Build settings
 markdown: kramdown
+safe: true
+encoding: utf-8
