@@ -15,11 +15,10 @@
 # in the templates via {{ site.myvariable }}.
 title: MyExperiments
 email: abrunet01@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-keywords: toto reiwff few
+description: "A blog about IT Security experiments"
+keywords: it,security,blog,cyber,experiments,it security blog,it blog
+
+domain: "myexperiments.io"
 url: "https://myexperiments.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 twitter_url: L0vvebug
