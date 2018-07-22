@@ -1,13 +1,13 @@
 ---
 layout: default
-title:  "Become anonymous online"
+title:  "Setting up a remote Tor middlebox"
 date:   2018-07-21 10:00:00
-categories: OpenBSD TOR VPN
+categories: VPN TOR OpenBSD
 author: Lovebug
 permalink: become-anonymous-online.html
 article_folder: "/tor-middle-box"
 comments: true
-description: "You want to be anonymous online ? You don't want to always set up all your environment for it. This article will provide you a solution, which will give you a good way to do it"
+description: ""
 keywords: "tor,anonymous,vpn,middle box,anonymous online"
 ---
 
@@ -76,16 +76,16 @@ So now you have your PKI you must generate some certificates and keys.
 
 ### a - OpenVPN server side
 
-You can download this <a href="{{ site.article_file }}{{ page.article_folder }}/openvpn-server.conf" download>OpenVPN server configuration</a> and run it with the following command: `openvpn --config openvpn.conf --daemon` (Check the process as been launch `ps auxwww | grep openVPN`. If any trouble remove the `--daemon` arguments for easy debugging).
+You can download this <a href="{{ site.article_file }}{{ page.article_folder }}/openvpn-server.conf" download >OpenVPN server configuration</a> and run it with the following command: `openvpn --config openvpn.conf --daemon` (Check the process as been launch `ps auxwww | grep openVPN`. If any trouble remove the `--daemon` arguments for easy debugging).
 
 Don't forget to modify the path of you'r certificates and keys on the OpenVPN configuration file.
 
 ### b - OpenVPN client side
 
-On the client side you can use this <a href="{{ site.article_file }}{{ page.article_folder }}/openvpn-client.conf" download>configuration file</a>, after creating the openvpn user `sudo adduser --no-create-home --disabled-login --system --group openvpn`.
+On the client side you can use this <a href="{{ site.article_file }}{{ page.article_folder }}/openvpn-client.conf" download >configuration file</a>, after creating the openvpn user `sudo adduser --no-create-home --disabled-login --system --group openvpn`.
 You must also copy the `ca.crt`, `client.crt`, and you should already have on your client the private key `client.key`.
 
-To make it work you should modify the configuration file by replacing the path of certificates and keys, or you can put directly there content in the OpenVPN configuration path.
+To make it work you should modify the configuration file by replacing the path of certificates and keys, or you can put directly there content in the OpenVPN configuration path. Don't forget to specify the server hostname or IP.
 For exemple with the `ca` you should add:
 
 ```
@@ -125,4 +125,28 @@ This an overview of the networking setup we want for make it work:
 
 ![tor-vpn-proxy]({{ site.article_img }}{{page.article_folder}}/tor-vpn-proxy.png){:class="img-responsive"}
 
-All the user network traffic is redirected in the TAP interface witch is the VPN interface so the flux will arrive in the remote server in a specific rdomain through the VPN and it will be routed in the vether interface, a pf rule will redirect all the input traffic on vether to the TOR service which bind a local address.
+All the user network traffic is redirected in the TAP interface witch is the interface used by the VPN. The flow will arrive in the remote server in his TAP interface and it will be redirect with a PF rule set to the Tor service which bind a local address.
+
+### a - Create the tap interface
+
+You can create it with `ifconfig` but after a reboot you will have to recreate it with the same command : `ifconfig tap1 up`, or you can make it persistent to a reboot by creating the hostname file and adding the configuration:  `echo "up" > /etc/hostname.tap1`.
+
+### b - Add Packet Filter rules set
+
+This is the minimal working rules set for you server, take care to let you a ssh access to you server.
+modify the `/etc/pf.conf` file with the below rules, and check the syntax with this commande `pfctl -nf /etc/pf.conf`, if no error is report with this command load this configuration with the command `pfctl -f /etc/pf.conf`. 
+
+```
+block in log all
+pass proto tcp to port 22
+pass out all keep state
+match in all scrub (no-df random-id)
+pass proto udp to port 44101
+pass in quick on tap1 rdr-to 127.0.0.1 port 9040
+```
+
+### c - Let's do some checks
+
+Everything’s setups, so let’s try if it’s working. Browse this website [monip.org](http://monip.org/) from your client. You should normaly see an IP address, which is not yours either than the remote server one. On the remote server restart the Tor process and check again you’r public IP address from your client, normaly it changed again.
+
+Enjoy your own anonymous VPN :)
