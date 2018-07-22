@@ -5,7 +5,7 @@ date:   2018-07-21 10:00:00
 categories: OpenBSD TOR VPN
 author: Lovebug
 permalink: become-anonymous-online.html
-img_folder: "/assets/img/posts/tor-middle-box"
+article_folder: "/tor-middle-box"
 comments: true
 description: "You want to be anonymous online ? You don't want to always set up all your environment for it. This article will provide you a solution, which will give you a good way to do it"
 keywords: "tor,anonymous,vpn,middle box,anonymous online"
@@ -43,7 +43,7 @@ So To make it simple a TOR transparent proxy is an intermediary system sitting b
 
 I will explain how to setups a remote TOR middlebox accessing through a VPN, as it show on the picture below.
 
-![tor-proxy]({{ site.url }}{{page.img_folder}}/tor-proxy.png){:class="img-responsive"}
+![tor-proxy]({{ site.article_img }}{{page.article_folder}}/tor-proxy.png){:class="img-responsive"}
 
 We will frist connect to our remote server with a VPN connection. The goal here is to connect securely from everywhere. Also, your service provider haven't any way to know that you are using the Tor protocol (But be aware that your server provider will know it).
 
@@ -69,3 +69,9 @@ You must setting up your own PKI and generating certificates and keys for an Ope
 You can read this article of [Freek Dijkstra](http://www.macfreek.nl/memory/Create_a_OpenVPN_Certificate_Authority) which is really helpful and complete on the subject.
 
 An other way to create your own PKI is to use `easy-rsa`, you will find some information in the OpenVPN documentation about that.
+
+# test dowload
+
+<a href="{{ site.article_file }}{{ page.article_folder }}/toto.txt" download>Download files</a>
+
+test
