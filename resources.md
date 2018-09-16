@@ -3,7 +3,7 @@ layout: default
 title: Resources
 permalink: resources.html
 comments: true
-description: "Some IT Security reousources"
+description: "Some IT Security resources"
 ---
 
 
