@@ -15,7 +15,7 @@ keywords: "tor,anonymous,vpn,middle box,anonymous online"
 
 Being anonymous on Internet is not such easy. There is different ways to do it. One of the easiest is to use Tor (The Onion Router).
 
-I have a remote server which I mostly use as VPN, so I had the idea that I can use it as a Tor middle box too. That will provide me an anonymous VPN.
+I have a remote server which I mostly use as VPN, so I had the idea to use it as a Tor middle box for providing me an anonymous VPN.
 
 In this article I will explain you how to setting up a TOR transparent proxy (middle box) in a remote [OpenBSD](https://www.openbsd.org/) server trough a VPN.
 
