@@ -13,9 +13,11 @@ keywords: "tor,anonymous,vpn,middle box,anonymous online"
 
 # I - Introduction
 
-Being anonymous on Internet is not such easy. There is different ways to do it. One of the easiest is to use Tor (The Onion Router). The advantage of using it as a transparent proxy against using the client is because you can easily connect and use it every where and from any devices you will just need a way to connect through a VPN.
+Being anonymous on Internet is not such easy. There is different ways to do it. One of the easiest is to use Tor (The Onion Router).
 
-This article will explain how to setting up a TOR transparent proxy (middle box) in a remote [OpenBSD](https://www.openbsd.org/) server trough a VPN.
+I have a remote server which I mostly use as VPN, so I had the idea that I can use it as a Tor middle box too. That will provide me an anonymous VPN.
+
+In this article I will explain you how to setting up a TOR transparent proxy (middle box) in a remote [OpenBSD](https://www.openbsd.org/) server trough a VPN.
 
 ## 1 - What's a TOR transparent proxy ?
 
