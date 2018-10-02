@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title:  "Local unix privilege escalation"
 date:   2018-09-27 09:00:00
 categories: System Pentest
