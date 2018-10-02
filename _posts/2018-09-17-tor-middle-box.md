@@ -4,7 +4,7 @@ title:  "Setting up a remote Tor middle box"
 date:   2018-09-17 09:00:00
 categories: VPN TOR OpenBSD
 author: Antoine Brunet
-permalink: become-anonymous-online.html
+permalink: tor-middle-box.html
 article_folder: "/tor-middle-box"
 comments: true
 description: "Setting up a TOR transparent proxy (middle box) in a remote OpenBSD server trough a VPN"
