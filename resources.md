@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: list
 title: Resources
 permalink: resources.html
 comments: true

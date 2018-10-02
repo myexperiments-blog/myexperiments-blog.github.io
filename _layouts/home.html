@@ -1,13 +1,28 @@
 ---
 layout: default
 ---
-<div id="home-content">
-  {% for post in site.posts %}
-    <div id="post-list">
-      <div id="post-info">
-      {{ post.date | date: "%B %e, %Y" }}
-      </div>
-      <h3><a id="post-list" class="link" href="{{ post.url }}">{{ post.title }}</a></h3>
+<div id="blank-title">
+  <div id="position-article-title">
+    <div id="article-title">
+      {% if page.title %}
+        <h1 class="super-title">{{ page.title }}</h1>
+      {% endif %}
     </div>
-  {% endfor %}
+  </div>
+</div>
+<div id="position-side-info">
+</div>
+<div id="position-article-content">
+  <div id="article-content">
+    <div id="home-content">
+      {% for post in site.posts %}
+        <div id="post-list">
+          <div id="post-info">
+          {{ post.date | date: "%B %e, %Y" }}
+          </div>
+          <h3><a id="post-list" class="link" href="{{ post.url }}">{{ post.title }}</a></h3>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>

@@ -1,0 +1,52 @@
+---
+layout: default
+---
+<div id="blank-title">
+    <div id="position-article-title">
+        <div id="article-title">
+            {% if page.title %}
+                <h1 class="super-title">{{ page.title }}</h1>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div id="position-side-info">
+    <div id="position-side-info-right">
+        <div id="side-info" class="auto-overflow">
+            <div id="side-about">
+                <h4>Follow me on:</h4>
+                <div id="follow-media">
+                    {% if site.twitter_url %}
+                        <div class="follow_account">
+                            <a class='link' href="https://twitter.com/{{ site.twitter_url }}">
+                                <p>Twitter</p>
+                                <img src="assets/img/twi.png" alt="twitter_img">
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if site.github_url %}
+                        <div class="follow_account">
+                            <a class='link' href="https://github.com/{{ site.github_url }}">
+                                <p>GitHub</p>
+                                <img src="assets/img/git.png" alt="github_img">
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if site.linkedin_url %}
+                        <div class="follow_account">
+                            <a class='link' href="https://www.linkedin.com/in/{{ site.linkedin_url }}">
+                                <p>LinkedIn</p>
+                                <img src="assets/img/lin.png" alt="linkedin_img">
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="position-article-content">
+    <div id="article-content">
+        {{ content }}
+    </div>
+</div>
