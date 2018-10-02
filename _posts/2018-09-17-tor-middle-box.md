@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title:  "Setting up a remote Tor middle box"
 date:   2018-09-17 09:00:00
 categories: VPN TOR OpenBSD
