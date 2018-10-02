@@ -8,13 +8,13 @@ unix-privesc-check
 
 - [Introduction](#Introduction)
 - [Kernel](##Kernel)
-- [Users & Groups](##Users-&-Groups)
 - [Deamon & Process](##Deamon-&-Process)
 - [Password mining](##Password-mining)
 - [Sudo](##Sudo)
 - [Cron](##Cron)
 - [File Permission](##File-Permission)
 - [Other usefull information](#Other-usefull-information)
+- [Users & Groups](##Users-&-Groups)
 
 ## Introduction
 
@@ -92,23 +92,6 @@ security posture.
 | `df -a` | File system information |
 
 ### Kernel escalation
-
-## Users & Groups
-
-### Information gathering
-
-| Command                | Result                            |
-| :-------------------- | :------------------------------- |
-| `whoami` | Print effective userid |
-| `id` | Print real and effective user and group IDs |
-| `awk -F ':' '{print $1}' /etc/passwd` | List all users on the system |
-| `awk -F ':' '{print $1}' /etc/group` | List all groups on the system |
-| `last` | Show listing of last logged in users |
-| `lastlog` | Foreach users get the last logged in |
-| `for i in $(cat /etc/passwd 2>/dev/null| cut -d":" -f1 2>/dev/null);do id $i;done 2>/dev/null` | List uid and groups for each users |
-| `grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 { print $1}'` | List all super users accounts |
-| `w` | Show who is logged on and what they are doing |
-| `users` or `who -a` | Print the user names of users currently logged in to the current host |
 
 ### Escalation
 
@@ -235,6 +218,32 @@ security posture.
 | `cat /etc/resolv.conf` | Show configured DNS sever addresses |
 | `head /var/mail/root` | Try to read root mail |
 
-### Escalation
+## Users & Groups
 
-### Remediation
+### Information gathering
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `whoami` | Print effective userid |
+| `id` | Print real and effective user and group IDs |
+| `awk -F ':' '{print $1}' /etc/passwd` | List all users on the system |
+| `awk -F ':' '{print $1}' /etc/group` | List all groups on the system |
+| `last` | Show listing of last logged in users |
+| `lastlog` | Foreach users get the last logged in |
+| `for i in $(cat /etc/passwd 2>/dev/null| cut -d":" -f1 2>/dev/null);do id $i;done 2>/dev/null` | List uid and groups for each users |
+| `grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 { print $1}'` | List all super users accounts |
+| `w` | Show who is logged on and what they are doing |
+| `users` or `who -a` | Print the user names of users currently logged in to the current host |
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `whoami` | Print effective userid |
+| `id` | Print real and effective user and group IDs |
+| `awk -F ':' '{print $1}' /etc/passwd` | List all users on the system |
+| `awk -F ':' '{print $1}' /etc/group` | List all groups on the system |
+| `last` | Show listing of last logged in users |
+| `lastlog` | Foreach users get the last logged in |
+| `for i in $(cat /etc/passwd 2>/dev/null| cut -d":" -f1 2>/dev/null);do id $i;done 2>/dev/null` | List uid and groups for each users |
+| `grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 { print $1}'` | List all super users accounts |
+| `w` | Show who is logged on and what they are doing |
+| `users` or `who -a` | Print the user names of users currently logged in to the current host |
