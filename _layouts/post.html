@@ -29,6 +29,28 @@ layout: default
             {% if page.description %}
                 <p id="side-text">{{ page.description }}</p>
             {% endif %}
+
+            <h4>Share this article:</h4>
+            <div id="follow-media">
+                <div class="follow_account">
+                    <a target="_blank" class='link' href="https://twitter.com/intent/tweet\?text={{page.title}}%0A{{site.url}}{{page.url}}">
+                        <p>Twitter</p>
+                        <img src="assets/img/twi.png" class="img_link" alt="twitter_img">
+                    </a>
+                </div>
+                <div class="follow_account">
+                    <a target="_blank" class='link' href="https://www.reddit.com/submit\?url={{site.url}}{{page.url}}&title={{page.title}}">
+                        <p>Reddit</p>
+                        <img src="assets/img/red.png" class="img_link" alt="reddit_img">
+                    </a>
+                </div>
+                <div class="follow_account">
+                    <a target="_blank" class='link' href="http://www.linkedin.com/shareArticle\?url={{site.url}}{{page.url}}&title={{page.title}}">
+                            <p>LinkedIn</p>
+                        <img src="assets/img/lin.png" class="img_link" alt="linkedin_img">
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
