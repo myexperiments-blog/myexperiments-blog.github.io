@@ -23,6 +23,7 @@ keywords: ""
         - [Process privilege escalation overview](#process-privilege-escalation-overview)
         - [Good practices to avoid process privilege escalation](#good-practices-to-avoid-process-privilege-escalation)
         - [Process information gathering](#process-information-gathering)
+    - [Other useful information which can be gathered](#other-useful-information-which-can-be-gathered)
 
 
 # Introduction
@@ -50,20 +51,20 @@ This article separate the local unix privilege escalation in different scopes: k
 
 ### Kernel privilege escalation overview
 
-...
+Kernel privilege escalation are made with kernel exploit, and generally give super user access.
 
 ### Good practices to avoid kernel privilege escalation
 
 There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always being aware about security vulnerabilities discovered and keeping your system up to date, patch it when a patch is realized.
 
-For a kernel privilege escalation the attacker will most of the time use a kernel exploit. For that he will need four conditions:
+For a kernel privilege escalation the attacker will use a kernel exploit. For that he will need four conditions:
 
 1. A vulnerable kernel
 1. A matching exploit
 1. The ability to transfer the exploit onto the target
 1. The ability to execute the exploit on the target
 
-We are never protected against a kernel vulnerabilities every days some 0 days are find and sold on the dark web. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is hundred purcent secured.
+We are never protected against a kernel vulnerabilities. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is hundred purcent secured.
 
 For this reason you must influence the last two points. So a good practice will be to focus on restricting or removing programs that enable file transfers, such as FTP, SCP, wget, curl or any program which can permit to realized file transfers. If you need this program restrict them to specific users, IP/domains, more they will be restricted and better it will be.
 
@@ -106,7 +107,7 @@ A good practice for all your sensitive services (a service which can be access f
 
 ### Process information gathering
 
-Some basic command to collect some clue for realized a privilege escalation by passing daemon and process exploitation.
+Some basic command to collect some clue for realized a privilege escalation by passing through a vulnerable process exploitation.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -121,6 +122,30 @@ Some basic command to collect some clue for realized a privilege escalation by p
 | `cat /etc/apache2/envvars 2>/dev/null |grep -i 'user|group' |awk '{sub(/.*export /,"")}1'`| Which account is Apache running as |
 | `mysql --version` | MYSQL version |
 | `psql -V` | Postgres version |
+
+## Other useful information which can be gathered
+
+Those commands are really useful to collect some clue for realized a privilege escalation.
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `whoami` | Print effective userid |
+| `id` | Print real and effective user and group IDs |
+| `awk -F ':' '{print $1}' /etc/passwd` | List all users on the system |
+| `awk -F ':' '{print $1}' /etc/group` | List all groups on the system |
+| `last` | Show listing of last logged in users |
+| `lastlog` | Foreach users get the last logged in |
+| `for i in $(cat /etc/passwd 2>/dev/null| cut -d":" -f1 2>/dev/null);do id $i;done 2>/dev/null` | List uid and groups for each users |
+| `grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 { print $1}'` | List all super users accounts |
+| `w` | Show who is logged on and what they are doing |
+| `users` or `who -a` | Print the user names of users currently logged in to the current host |
+| `cat /etc/shells` | Pathnames of valid login shells |
+| `cat /etc/profile` | Display default system variables |
+| `env` | Display environmental variables |
+| `route` | Display route information |
+| `arp -a` | Display arp table |
+| `cat /etc/resolv.conf` | Show configured DNS sever addresses |
+| `head /var/mail/root` | Try to read root mail |
 | `perl -v` | Perl version |
 | `java -version` | Java version |
 | `python --version` | Python version|
