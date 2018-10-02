@@ -132,7 +132,7 @@ table th {
   padding: 0;
 }
 
-#side-about h4 {
+.side-title {
   font-weight: normal;
   color: var(--color-info);
   margin-bottom: 25px;
