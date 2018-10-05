@@ -32,3 +32,6 @@ timezone: America/New_York
 
 article_img: "https://myexperiments.io/assets/img/posts"
 article_file: "https://myexperiments.io/assets/files"
+
+plugins:
+  - jekyll-sitemap
