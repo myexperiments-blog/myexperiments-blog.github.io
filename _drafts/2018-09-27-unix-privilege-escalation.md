@@ -27,6 +27,11 @@ keywords: ""
         - [Mining sensitive information for gain a privilege escalation](#mining-sensitive-information-for-gain-a-privilege-escalation)
         - [Good practices to prevent credentials leak](#good-practices-to-prevent-credentials-leak)
         - [Mining credentials commands](#mining-credentials-commands)
+    - [Sudo](#sudo)
+        - [Sudo overview](#sudo-overview)
+        - [Sudo good practices](#sudo-good-practices)
+        - [Sudo information gathering](#sudo-information-gathering)
+        - [Privilege escalation example using sudo](#privilege-escalation-example-using-sudo)
     - [Other useful information which can be gathered](#other-useful-information-which-can-be-gathered)
 
 
@@ -149,6 +154,27 @@ Here some few commands which can be useful for finding credentials on a unix sys
 | `history | grep -B4 -A3 -i 'passwd\|ssh\|host\|nc\|ping' 2>/dev/null` | Check history for interesting information |
 | `grep -B3 -A3 -i 'pass\|password\|login\|username\|email\|mail\|host\|ip' /var/log/*.log 2>/dev/null` | Check log file in `/var/log` for password, login, or email information |
 | `find / -maxdepth 4 -name '*.conf' -type f -exec grep -Hn 'pass\|password\|login\|username\|email\|mail\|host\|ip' {} \; 2>/dev/null` | Find the configuration files which contain interesting information |
+
+## Sudo
+
+### Sudo overview
+
+The `sudo` command give the possibility to a user to execute a command as another user (usually those of the root account).
+A well configured `sudo` permit to give some specifics privileges to a user without breaking the security.
+
+### Sudo good practices
+
+A miss configuration of the sudo command can easily lead to a privilege escalation. To prevent it there is few good practices:
+
+the first one is to granted the minimum possible privileges to perform necessary tasks or operations. So for example if you want to allow an user to listen on a specific interface with `tcpdump`. You should configure `sudo` like that `user localhost = (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`, this configuration will only permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root.
+
+Never configure `sudo` like that `user	ALL=NOPASSWD:ALL`.
+
+And finally 
+
+### Sudo information gathering
+
+### Privilege escalation example using sudo
 
 ## Other useful information which can be gathered
 
