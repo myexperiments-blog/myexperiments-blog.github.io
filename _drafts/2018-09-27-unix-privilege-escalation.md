@@ -23,6 +23,10 @@ keywords: ""
         - [Process privilege escalation overview](#process-privilege-escalation-overview)
         - [Good practices to avoid process privilege escalation](#good-practices-to-avoid-process-privilege-escalation)
         - [Process information gathering](#process-information-gathering)
+    - [Mining credentials information](#mining-credentials-information)
+        - [Mining sensitive information for gain a privilege escalation](#mining-sensitive-information-for-gain-a-privilege-escalation)
+        - [Good practices to prevent credentials leak](#good-practices-to-prevent-credentials-leak)
+        - [Mining credentials commands](#mining-credentials-commands)
     - [Other useful information which can be gathered](#other-useful-information-which-can-be-gathered)
 
 
@@ -122,6 +126,29 @@ Some basic command to collect some clue for realized a privilege escalation by p
 | `cat /etc/apache2/envvars 2>/dev/null |grep -i 'user|group' |awk '{sub(/.*export /,"")}1'`| Which account is Apache running as |
 | `mysql --version` | MYSQL version |
 | `psql -V` | Postgres version |
+
+## Mining credentials information
+
+### Mining sensitive information for gain a privilege escalation
+
+On a server (it is much more true for a personal computer) you can find many different sensitive information like login, password, private and public keys, certificates... Theses information can be find and used to access on an other machine, service or for realized a privilege escalation.
+
+### Good practices to prevent credentials leak
+
+To prevent this kind of leak you should take care of the privilege access of the sensitive directories, like `/home/<user>/.ssh` directory which can normally only be read and write by the user (`chmod 600`) or the `/etc/shadow` file which is normally in read write for the root user and in read for the root group (`chomd 640`).
+
+It is also really important to never put some credentials in any code or configuration file. If for any reason, you have to do it, be sure the password is not in clear and the script or config file have specific privilege that not let anyone to read it.
+
+### Mining credentials commands
+
+Here some few commands which can be useful for finding credentials on a unix system.
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `history` | Displays command history of current user |
+| `history | grep -B4 -A3 -i 'passwd\|ssh\|host\|nc\|ping' 2>/dev/null` | Check history for interesting information |
+| `grep -B3 -A3 -i 'pass\|password\|login\|username\|email\|mail\|host\|ip' /var/log/*.log 2>/dev/null` | Check log file in `/var/log` for password, login, or email information |
+| `find / -maxdepth 4 -name '*.conf' -type f -exec grep -Hn 'pass\|password\|login\|username\|email\|mail\|host\|ip' {} \; 2>/dev/null` | Find the configuration files which contain interesting information |
 
 ## Other useful information which can be gathered
 
