@@ -166,7 +166,7 @@ A well configured `sudo` permit to give some specifics privileges to a user with
 
 A miss configuration of the sudo command can easily lead to a privilege escalation. To prevent it there is few good practices:
 
-the first one is to granted the minimum possible privileges to perform necessary tasks or operations. So for example if you want to allow an user to listen on a specific interface with `tcpdump`. You should configure `sudo` like that `user localhost = (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`, this configuration will only permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root.
+The first one is to granted the minimum possible privileges to perform necessary tasks or operations, be the more specific than you can. For example if you want to allow a user to listen on a specific interface with `tcpdump`. You should configure `sudo` like that `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`, this configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root no other argument.
 
 Never configure `sudo` like that `user	ALL=NOPASSWD:ALL`.
 
