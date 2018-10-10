@@ -6,10 +6,10 @@ comments: true
 description: "Some IT Security resources"
 ---
 
-
 # Pentest
 
 - [Quarkslab's blog](https://blog.quarkslab.com/)
+- [Le journal d'un reverser](https://0x90909090.blogspot.com/) is a cool blog about the experiments of a penetration tester.
 
 # Malware
 
