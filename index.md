@@ -1,5 +1,5 @@
 ---
 layout: home
-title: Posts
+title: Home
 side: Welcome on MyExperiments.io
 ---
