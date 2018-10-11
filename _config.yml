@@ -15,8 +15,9 @@
 # in the templates via {{ site.myvariable }}.
 title: MyExperiments
 email: abrunet01@gmail.com
-description: "A blog about IT Security experiments"
-keywords: "it,security,blog,cyber,experiments,it security blog,it blog"
+# Description 150 char max
+description: "Hello there! MyExperiments.io is a blog about IT security. Here I share with you my personal projects and experimentation. Enjoy it!"
+keywords: "it security,security,blog,cyber,experiments,it security blog,it blog"
 
 url: "https://myexperiments.io"
 
