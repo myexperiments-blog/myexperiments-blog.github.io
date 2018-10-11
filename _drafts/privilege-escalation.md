@@ -4,9 +4,10 @@ https://www.sans.org/reading-room/whitepapers/testing/attack-defend-linux-privil
 
 unix-privesc-check
 
-- [Sudo](##Sudo)
-- [Cron](##Cron)
+
 - [File Permission](##File-Permission)
+- [Cron](##Cron)
+
 
 ## Summary
 
