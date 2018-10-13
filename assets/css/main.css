@@ -12,6 +12,15 @@ body {
   color: var(--color-article-title);
 }
 
+.post-title {
+  font-size: 18px;
+}
+
+.post-description {
+  font-size: 14px;
+  color: var(--color-minim-title);
+}
+
 h1 {
   font-size: 25px;
   color: var(--color-major-title);
@@ -138,7 +147,7 @@ table th {
   margin-bottom: 25px;
 }
 
-#post-info {
+#post-date {
   color: var(--color-info);
 }
 
