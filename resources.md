@@ -49,3 +49,4 @@ a Certificate Fingerprint (SHA-1 or SHA-256)
 # Others
 
 - [Awesome-pentest](https://github.com/enaqx/awesome-pentest) is a large collections of interesting security resources
+- [Shell-strom](http://shell-storm.org/shellcode) is a shellcodes database for study cases
