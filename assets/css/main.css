@@ -95,6 +95,16 @@ table th {
   color: var(--color-link-hover);
 }
 
+a {
+  text-decoration: none;
+  color: var(--color-link);
+}
+
+a:hover {
+  text-decoration: none;
+  color: var(--color-link-hover);
+}
+
 .follow_account {
   margin-bottom: 10px;
   height: 40px;
