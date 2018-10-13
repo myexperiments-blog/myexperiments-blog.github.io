@@ -213,6 +213,7 @@ a:hover {
 }
 
 #article-content {
+  max-width: 800px;
   margin-left: 15px;
   padding: 15px;
 }
