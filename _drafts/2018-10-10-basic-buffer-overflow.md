@@ -13,28 +13,28 @@ keywords: "buffer overflow, gdb, proof of concept, shellcode"
 # Introduction
 
 This document will be an overview of a very basic buffer overflow.
-We will see the exploitation of a vulnerable program compile in 32 bit on an x86 architecture.
+We will see the exploitation of a vulnerable program compile in 32 bits on an x86 architecture.
 
 A buffer overflow is a bug that appears when a process writes in a memory buffer (stack or heap) and exceeds the allocated memory, overwriting some information used by the process. When this bug appears non intentionally, the computer comportment is unpredictable, most of the time this results as a seg fault error.
 If the bug is exploited, it can permit attacker to inject some code.
 
 Throughout the years, security has been improved to prevent this type of bug as much as possible. To block them, the developers have modifies the kernel with the implementation of the ASLR (Address Space Layout Randomization) and the openwall patch. The compiler is also modified by adding the canary. For this article all security will be disabled.
 
-There are other ways to exploit a buffer overflow like the ret into libc, or ROP, those techniques will not be explained in this article.
+There are other ways to exploit a buffer overflow like the ret into libc, or ROP. Those techniques will not be explained in this article.
 
 # Few reminders
 
 When a program is executed, it is transformed to a process image by the program loader and a virtual memory space is allowed in RAM. The program loader will map all the loadable segment of the binary and the needed library with the system call, mmap(). This virtual space is divided into two spaces, user and kernel space. The user space cannot access kernel space, but the kernel space can access user space. So in our case we will abuse the user space.
 
 Register we need to know for the exploitation:
-- EIP (RIP for 64 bits) which correspond to the instruction pointe, this one contain the address of the next instruction to execute.
+- EIP (RIP for 64 bits) which correspond to the instruction pointer, this one contain the address of the next instruction to execute.
 - ESP (RSP for 64 bits) which correspond to the top stack pointer, it permit to see the element we insert on the stack.
 
 # The vulnerable program
 
 ## Source code
 
-```
+```c
 #include<stdio.h>
 #include<string.h>
 
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
 /*
    The crackMeMaybe function is vulnerable to a buffer overflow.
-   Using strcpy is bad, you should use strncpy.
+   The use of strcpy is prohibited, you must use strncpy.
 */
 void crackMeMaybe(const char* arg){
     char buffer[128];
@@ -72,13 +72,13 @@ void callMeMaybe(){
 
 We deactivate the Address Space Layout Randomization (ASLR).
 
-```
+```sh
 $ echo 0 > /proc/sys/kernel/randomize_va_space
 ```
 
 We compile the program with this Makefile without the GCC compilator security.
 
-```
+```sh
 V=vuln.c
 
 EXEC_V_32=crackme-32
@@ -102,7 +102,7 @@ ou
 $ nm crackme-32
 ```
 
-Now we can launch `gdb` to get the information we need to exploit our crackme program.
+Now we can launch `gdb` (I use it with [peda](https://github.com/longld/peda)) to get the information we need to exploit our crackme program.
 
 ```sh
 $ gdb
@@ -169,7 +169,7 @@ Great, we just got owned ;), we get the message `Pwned !!`.
 The Shellcode is a program composed of hexadecimal commands.
 
 Before, we found the offset (140), we dispose of a 23 bytes shellcode which correspond to the `/bin/dash` command.
-Now we need to find the address of our buffer. We can use `gdb` to get it, `A` equal to `0x41` in hexadecimal. Let's pass in argument two hundred `A` and check the ESP register to find them.
+Now we need to find the address of our buffer. We can use `gdb` to get it, the `A` character equal to `0x41` in hexadecimal. Let's pass in argument two hundred `A` and check the ESP register to find them.
 
 ```sh
 gdb$ run $(python -c 'print "A" *200')
