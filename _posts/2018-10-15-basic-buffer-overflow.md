@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Exploit a basic buffer overflow"
-date:   2018-10-10 09:00:00
+date:   2018-10-15 09:00:00
 tags: Development
 author: Antoine Brunet
 permalink: exploit-basic-buffer-overflow.html
