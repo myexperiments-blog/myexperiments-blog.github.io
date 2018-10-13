@@ -1,38 +1,26 @@
 ---
 layout: post
-title:  "A basic buffer overflow exploitation"
+title:  "A basic buffer overflow exploitation example"
 date:   2018-10-10 09:00:00
 categories: Development
 author: Antoine Brunet
 permalink: basic-buffer-overflow.html
-article_folder: ""
 comments: true
-description: ""
-keywords: ""
+description: "Proof of concept of a really basic buffer overflow"
+keywords: "buffer overflow, gdb, proof of concept"
 ---
-
-# Summary
-
-- Introduction
-- Few reminders
-- Our vulnerable programme
-    - Source code
-    - compilation without security
-- Exploitation 32bit
-    - Function exectution
-    - shellcode injection
 
 # Introduction
 
 This document will be an overview of a very basic buffer overflow.
-We will see the exploitation of a vulnerable program compile in 32 bit and 64 bit on the architecture X86.
+We will see the exploitation of a vulnerable program compile in 32 bit on an x86 architecture.
 
-A buffer overflow is a bug which appear when a process write in a memory buffer (stack or heap) and he overflow the allocated place overwriting some information used by the process. When this bug appear non intentionally the computer comportment is unpredictable, most of the time it result by a seg fault error.
-If the bug is exploited it can permit the attacker to inject some code.
+A buffer overflow is a bug which appears when a process write in a memory buffer (stack or heap) and exceeds the allocated memory overwriting some information used by the process. When this bug appears non intentionally, the computer comportment is unpredictable, most of the time this result by a seg fault error.
+If the bug is exploited it can permit to the attacker to inject some code.
 
-Some security exist to prevent this kind bugs. Some are implement directly in the kernel, like ASLR and the patch openwall. Some other are implement in the compilator like the canari. For this article we will désactivate all thoses security, our goal  here is juste to get a simple overview.
+Along the years, security has been improved to prevent as much as possible this kind of bugs. To stem it developers did modify the kernel with the implementation of the ASLR (Address Space Layout Randomization) and the openwall patch. They also did modify the compiler by adding the canary. For this article all security will be disabled.
 
-Just for knowing there is other way to exploit a buffer overflow like the ret into libc, or ROP, those techniques will not be explained in this article.
+There are other ways to exploit a buffer overflow like the ret into libc, or ROP, those techniques will not be explained in this article.
 
 #  Few reminders
 
@@ -112,11 +100,11 @@ clean:
 	rm -rf $(EXEC_V_32) $(EXEC_V_64) peda-session-$(EXEC_V_32).txt peda-session-$(EXEC_V_64).txt
 ```
 
-Without those security the stack is executable, we remove the canaris, and the ASLE is desactivate.
+Without those security the stack is executable, we remove the canaris, and the ASLR is desactivate.
 
 # Exploitation 32bit
 
-First we will check for the différent function on the executable and how they are mapped in memory with `objdump` or `nm`
+First we will check for the different function on the executable and how they are mapped in memory with `objdump` or `nm`
 
 ```sh
 $ objdump -x v1-32
