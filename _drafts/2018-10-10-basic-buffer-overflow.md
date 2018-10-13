@@ -6,7 +6,7 @@ tags: Development
 author: Antoine Brunet
 permalink: exploit-basic-buffer-overflow.html
 comments: true
-description: "Let's take a look to this basic buffer overflow proof of concept to understand how they works"
+description: "Understanding buffer overflow code injection through a basic example"
 keywords: "buffer overflow, gdb, proof of concept, shellcode"
 ---
 
