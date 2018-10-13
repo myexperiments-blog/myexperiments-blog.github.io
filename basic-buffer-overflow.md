@@ -4,7 +4,7 @@ title:  "Exploit a basic buffer overflow"
 date:   2018-10-10 09:00:00
 tags: Development
 author: Antoine Brunet
-permalink: exploit-basic-buffer-overflow.html
+permalink: article-correction-1.html
 comments: true
 description: "Let's take a look to this basic buffer overflow proof of concept to understand how they works"
 keywords: "buffer overflow, gdb, proof of concept, shellcode"
