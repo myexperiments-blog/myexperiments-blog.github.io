@@ -2,7 +2,7 @@
 layout: post
 title:  "A basic buffer overflow exploitation example"
 date:   2018-10-10 09:00:00
-categories: Development
+tags: Development
 author: Antoine Brunet
 permalink: basic-buffer-overflow.html
 comments: true

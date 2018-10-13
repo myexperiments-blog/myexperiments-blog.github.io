@@ -17,17 +17,17 @@ layout: default
                 <p id="side-date">{{ page.date | date: "%B %e, %Y" }}</p>
             {% endif %}
             {% if page.author %}
-                <p id="side-author">By: {{ page.author }}</p>
+                <p id="side-author"><h4 class="side-title">Author:</h4>{{ page.author }}</p>
             {% endif %}
-            {% if page.categories %}
-                <p id="side-category">Categories:
-            {% for category in page.categories %}
-                <br> {{ category }}
+            {% if page.tags %}
+                <p id="side-category"><h4 class="side-title">Tags:</h4>
+            {% for tag in page.tags %}
+                {{ tag }}<br>
             {% endfor %}
             </p>
             {% endif %}
             {% if page.description %}
-                <p id="side-text">{{ page.description }}</p>
+                <p id="side-text"><h4 class="side-title">Description:</h4>{{ page.description }}</p>
             {% endif %}
 
             <h4 class="side-title">Share this article:</h4>

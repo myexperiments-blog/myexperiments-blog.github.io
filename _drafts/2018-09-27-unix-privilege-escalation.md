@@ -2,12 +2,12 @@
 layout: post
 title:  "Local unix privilege escalation"
 date:   2018-09-27 09:00:00
-categories: System Pentest
+tags: System Pentest
 author: Antoine Brunet
 permalink: unix-privilege-escalation.html
 article_folder: ""
 comments: true
-description: ""
+description: "Overview of privilege escalation, using many different technics."
 keywords: ""
 ---
 

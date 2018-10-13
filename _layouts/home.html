@@ -21,7 +21,7 @@ layout: default
           {{ post.date | date: "%B %e, %Y" }}
           </div>
           <h3 class="post-title"><a id="post-list" class="link" href="{{ post.url }}">{{ post.title }}</a></h3>
-          <div class="post-description">{{ post.description }}</div>
+          <div>{{ post.description }}</div>
         </div>
       {% endfor %}
     </div>
