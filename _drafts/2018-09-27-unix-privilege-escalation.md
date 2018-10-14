@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Local unix privilege escalation"
+title:  "Local Linux privilege escalation"
 date:   2018-09-27 09:00:00
 tags: System Pentest
 author: Antoine Brunet
-permalink: unix-privilege-escalation.html
+permalink: linux-privilege-escalation.html
 article_folder: ""
 comments: true
 description: "Overview of privilege escalation, using many different technics."
@@ -14,7 +14,7 @@ keywords: ""
 # Summary
 
 - [Introduction](#introduction)
-- [Unix privilege escalation scopes](#unix-privilege-escalation-scopes)
+- [Linux privilege escalation scopes](#linux-privilege-escalation-scopes)
     - [Kernel](#kernel)
         - [Kernel privilege escalation overview](#kernel-privilege-escalation-overview)
         - [Kernel information gathering](#kernel-information-gathering)
@@ -31,6 +31,10 @@ keywords: ""
     - [File permission](#file-permission)
         - [File permission overview](#file-permission-overview)
         - [File permission information gathering](#file-permission-information-gathering)
+    - [NFS](#nfs)
+        - [Network File System overview](#network-file-system-overview)
+        - [NFS information gathering](#nfs-information-gathering)
+        - [Privilege escalation examples using NFS](#privilege-escalation-examples-using-nfs)
     - [Cron](#cron)
         - [Cron privilege escalation overview](#cron-privilege-escalation-overview)
         - [Cron information gathering](#cron-information-gathering)
@@ -39,34 +43,24 @@ keywords: ""
 
 # Introduction
 
-When an attacker succeed to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to an other user with more privileges). We call this action a privilege escalation. It can happen in all sort of application or systems, in this article we only describe the unix system escalation.
+When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sort of applications or systems. This article will only describe it in the Linux system.
 
-Before to go forward we must think like an attacker for hunderstanding the importance of securing a machine to a privilege escalation.
-
-What an attacker may want from our system ?
-He may want to :
-- steal some sensitive data
-- use the hacked system to access to an other one
-- want to use our system for pivot to others.
-
-In all theses cases after he will gain access to the machine he will need to secure his access. He do not want to reused the vulnerability each time he want to connect to your system it will be to noisy and it will let anyone who find the vulnerability access to the machine for this reason most of the time attacker's patch the vulnerability they used. So he will have to install a backdoor. A rootkit will be the best choice for him to secured his access. But for install a rootkit or any kind of hidden backdoor he will need to be administrator before. So he will need to find a privilege escalation attack on the system from the user he first get for gain superior privilege.
-
-This article will try to give a complete overview of all unix privilege escalation technics.
+This article will try to give a complete overview of all Linux privilege escalation techniques.
 Do not hesitate to share with us your techniques in the comments.
 
-For helping you to gather information on a unix computer you can use this cool script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check), which can be very useful.
+For helping you to gather information you can use this script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check).
 
-# Unix privilege escalation scopes
+# Linux privilege escalation
 
-This article separate the local unix privilege escalation in different scopes: kernel, deamon and process, password mining, sudo, cron and file permission. Foreach I will gave you  commands for information gasthering, I will explain how to gain an escalation privilege with the information you collect, and finnaly I will give you the remediation.
+This article separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, I will give a quick overview, some good practices, some information gathering commands, and I will explain how an attacker can gain a privilege escalation.
 
 ## Kernel
 
 ### Kernel privilege escalation overview
 
-Kernel privilege escalation are made with kernel exploit, and generally give the root access.
+A kernel privilege escalation is done with a kernel exploit, and generally give the root access.
 
-There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always being aware about security reports and keeping your system up to date.
+There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always be aware about security reports and keeping your system up to date.
 
 For a kernel privilege escalation the attacker will use a kernel exploit. For that he will need three conditions:
 
@@ -74,20 +68,19 @@ For a kernel privilege escalation the attacker will use a kernel exploit. For th
 1. The ability to transfer the exploit onto the target
 1. The ability to execute the exploit on the target
 
-We are never protected against a kernel vulnerabilities. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is hundred purcent secured.
+We are never protected against a kernel vulnerability. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is hundred percent secured.
 
-For this reason you must influence the last two points. So a good practice will be to focus on restricting or removing programs that enable file transfers, such as FTP, SCP, wget, curl or any program which can permit to realized file transfers. If you need this program restrict them to specific users, IP/domains, more they will be restricted and better it will be.
+For this reason you must influence the last two points. A good practice will be to focus on restricting or removing programs that enable file transfers, such as FTP, SCP, wget, curl or any programs which can permit to realize file transfers. If you need these programs, restrict them to specific users, or IP/domains more they will be restricted and better it will be.
 
 It is also a good practice to remove or restrict the access of all the compilers such as gcc.
 
-An other good practice will be to limit directories that are writable and
-executable, particularly by service users.
+Another good practice is to limit directories that are writable or executable, particularly by service dedicated users (such as www-data for Apache).
 
-Finally, but it is most of the time hard to do because it has a cost, it is a really good practice to externalized logs in an other machine.
+Finally, it is a really important to externalized logs in an other machine.
 
 ### Kernel information gathering
 
-Some basic command to collect some clue for realized a unix kernel exploitation
+Some basic command to collect some clue for realized a Linux kernel exploitation
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -143,7 +136,7 @@ It is also really important to never put some credentials in any code or configu
 
 ### Mining credentials commands
 
-Here some few commands which can be useful for finding credentials on a unix system.
+Here some few commands which can be useful for finding credentials on a Linux system.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -241,6 +234,37 @@ Some basic command to collect some clue for realized a privilege escalation abus
 | `ls -la ~/.ssh/` | Check current user's ssh files |
 | `find /etc -maxdepth 1 -name '*.conf' -type f` or `ls -la /etc/*.conf` | List the configuration files in /etc (depth 1, modify the maxdepth param in the first command for change it) |
 | `lsof | grep '/home/\|/etc/\|/opt/'` | Display the possibly interesting openfiles |
+
+## Network File System
+
+### Network File System overview
+
+"The Network File System (NFS) is a distributed filesystem that allows users to mount remote filesystems as if they were local. NFS uses a client-server model, in which a server exports directories to be shared, and clients mount the directories to access the files in them. NFS eliminates the need to keep copies of files on several machines by letting the clients all share a single copy of a file on the server."
+
+This definition come from the book :
+`Linux in a Nutshell, 3rd Edition` By `Ellen Siever, Stephen Spainhour, Stephen Figgins and Jessica P. Hekman`.
+
+When this service is running on our server we must be very careful and follow some good practices.
+
+We must never configure a file system with `no_root_squash` which will mean that we allow the remote user to write in the server file system as root.
+
+We should specify on `/etc/hosts.allow` the allowed users fore our NFS.
+
+### NFS information gathering
+
+| Command                | Result                            |
+| :-------------------- | :------------------------------- |
+| `nmap -sV --script=nfs-showmount <IP Server>` | This nmap script will give you the information about the NFS |
+| `showmount -e <IP Server>` | Same as the nmap script bellow but you will have to install a client `apt-get install nfs-common` |
+
+### Few ideas for realized a NFS privilege escalation
+
+There is plenty of possibilities to realized a privilege escalation on a NFS, like:
+- create a file giving a shell with the SUID permission.
+- create or modify the file `~/.ssh/authorized_keys` with your public key.
+- set the SUID permission to a handmade script, or a binary (`/bin/sh`, `/usr/bin/vi`) which will permit to get a shell console.
+- modify the `/etc/shadow` and the `/etc/passwd` to create a new user or to change the password of one already existing.
+- modify the `sudo` configuration file
 
 ## Cron
 

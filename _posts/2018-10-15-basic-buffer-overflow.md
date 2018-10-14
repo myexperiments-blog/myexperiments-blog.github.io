@@ -76,7 +76,7 @@ We deactivate the Address Space Layout Randomization (ASLR).
 $ echo 0 > /proc/sys/kernel/randomize_va_space
 ```
 
-We compile the program with this Makefile without the GCC compilator security.
+We compile the program with this Makefile without the GCC compilers security.
 
 ```sh
 V=vuln.c
