@@ -240,7 +240,7 @@ a:hover {
 }
 
 #menu li a:hover {
-    background-color: #111;
+    color: var(--color-second-banner);
 }
 
 #banner {
