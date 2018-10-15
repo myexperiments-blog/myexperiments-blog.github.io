@@ -1,14 +1,13 @@
 ---
 layout: post
-title:  "Local Linux privilege escalation"
+title:  "Local Linux privilege escalation overview"
 date:   2018-09-27 09:00:00
 tags: System Pentest
 author: Antoine Brunet
 permalink: linux-privilege-escalation.html
-article_folder: ""
 comments: true
-description: "Overview of privilege escalation, using many different technics."
-keywords: ""
+description: "This article will give an overview of the basic Linux privilege escalation techniques. Different scopes will be explained like the kernel, the permission file..."
+keywords: "privilege escalation, linux, escalate, root, become root, super user"
 ---
 
 # Summary
@@ -45,7 +44,7 @@ keywords: ""
 
 When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sort of applications or systems. This article will only describe it in the Linux system.
 
-This article will try to give a complete overview of all Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will be gave a quick overview, some good practices, some information gathering commands, and an explanations the techniques an attacker can use to realize a privilege escalation.
+This article will give an overview of the basic Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will be gave a quick overview, some good practices, some information gathering commands, and an explanations the techniques an attacker can use to realize a privilege escalation.
 Do not hesitate to share with us your techniques in the comments.
 
 For helping you to gather information you can use this script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check).
