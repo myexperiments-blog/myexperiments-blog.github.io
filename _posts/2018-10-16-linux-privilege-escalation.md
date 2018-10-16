@@ -1,10 +1,10 @@
 ---
 layout: post
 title:  "Local Linux privilege escalation overview"
-date:   2018-09-27 09:00:00
+date:   2018-10-16 09:00:00
 tags: System Pentest
 author: Antoine Brunet
-permalink: correction.html
+permalink: linux-privilege-escalation.html
 comments: true
 description: "This article will give an overview of the basic Linux privilege escalation techniques. Different scopes will be explained like the kernel, the permission file..."
 keywords: "privilege escalation, linux, escalate, root, become root, super user"
@@ -20,7 +20,7 @@ keywords: "privilege escalation, linux, escalate, root, become root, super user"
     - [1. Process privilege escalation overview](#1-process-privilege-escalation-overview)
     - [2. Process information gathering](#2-process-information-gathering)
 - [IV. Mining credentials information](#iv-mining-credentials-information)
-    - [1. Mining sensitive information for gain a privilege escalation](#1-mining-sensitive-information-for-gain-a-privilege-escalation)
+    - [1. Mining sensitive information to gain a privilege escalation](#1-mining-sensitive-information-to-gain-a-privilege-escalation)
     - [2. Useful commands to mine credentials](#2-useful-commands-to-mine-credentials)
     - [3. Useful tools to mine credentials](#3-useful-tools-to-mine-credentials)
 - [V. Sudo](#v-sudo)
@@ -37,17 +37,17 @@ keywords: "privilege escalation, linux, escalate, root, become root, super user"
 - [VIII. Cron](#viii-cron)
     - [1. Cron privilege escalation overview](#1-cron-privilege-escalation-overview)
     - [2. Cron information gathering](#2-cron-information-gathering)
-- [IX. Other useful information which can be gathered](#ix-other-useful-information-which-can-be-gathered)
+- [IX. Other useful information that can be gathered](#ix-other-useful-information-that-can-be-gathered)
 
 
 # I. Introduction
 
-When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sort of applications or systems. This article will only describe it in the Linux system.
+When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sorts of applications or systems. This article will only describe it in the Linux system.
 
-This article will give an overview of the basic Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will be gave a quick overview, some good practices, some information gathering commands, and an explanations the techniques an attacker can use to realize a privilege escalation.
+This article will give an overview of the basic Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will give a quick overview, some good practices, some information gathering commands, and an explanation the technique an attacker can use to realize a privilege escalation.
 Do not hesitate to share with us your techniques in the comments.
 
-For helping you to gather information you can use this script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check).
+To help you to gather information you can use this script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check).
 
 # II. Kernel
 
@@ -57,25 +57,25 @@ A kernel privilege escalation is done with a kernel exploit, and generally give 
 
 There is no way to completely avoid a kernel privilege escalation. But some good practices are good to know. The first one is to always be aware about security reports and keeping your system up to date.
 
-For a kernel privilege escalation the attacker will use a kernel exploit. For that he will need three conditions:
+For a kernel privilege escalation the attacker will use a kernel exploit. In order to do so, he will need three conditions:
 
 1. A working exploit
 1. The ability to transfer the exploit onto the target
 1. The ability to execute the exploit on the target
 
-We are never protected against a kernel vulnerability. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is hundred percent secured.
+We are never protected against a kernel vulnerability. So even if you or your company are aware about IT security and are following the CVS publication, you cannot be sure that your system is one hundred percent secured.
 
-For this reason you must influence the last two points. A good practice will be to focus on restricting or removing programs that enable file transfers, such as FTP, SCP, wget, curl or any programs which can permit to realize file transfers. If you need these programs, restrict them to specific users, or IP/domains more they will be restricted and better it will be.
+For this reason you must influence the last two points. A good practice will be to focus on restricting or removing programs that enable file transfers, such as FTP, SCP, wget, curl or any programs which can permit to realize file transfers. If you need these programs, restrict them to specific users, or IP/domains, the more they will be restricted and the better it will be.
 
 It is also a good practice to remove or restrict the access of all the compilers such as gcc.
 
 Another good practice is to limit directories that are writable or executable, particularly by service dedicated users (such as www-data for Apache).
 
-Finally, it is a really important to externalized logs in an other machine.
+Finally, it is a really important to externalize logs in another machine.
 
 ## 2. Kernel information gathering
 
-Some basic command to collect some clue for realized a Linux kernel exploitation
+Some basic command to collect some clue to realize a Linux kernel exploitation
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -95,7 +95,7 @@ Some basic command to collect some clue for realized a Linux kernel exploitation
 
 Most of the time an attacker succeeds to establish the initial foothold by using a misconfigured or vulnerable running service, but it does not stop there. An attacker can use a process which is only accessible locally for doing privilege escalation. For example, a vulnerable MySQL database running as root.
 
-Commonly the method attack will be similar than for a kernel privilege escalation. The attacker will use an exploit, and for that he will need the three conditions we see [upper](#kernel-privilege-escalation-overview). Also all the good practice explained in the kernel section can be transposed for the running processes.
+Commonly the method attack will be similar to kernel privilege escalation. The attacker will use an exploit, and for that he will need the three conditions we see [above](#kernel-privilege-escalation-overview). Also all the good practice explained in the kernel section can be transposed for the running processes.
 
 A good practice for all your sensitive services (a service which can be accessed from the outside is definitely sensitive) is to run them into a `chroot jail`, at least creating a dedicated user. Never run them as root.
 
@@ -119,13 +119,13 @@ Some basic command to collect some clue to realize a privilege escalation by pas
 
 # IV. Mining credentials information
 
-## 1. Mining sensitive information for gain a privilege escalation
+## 1. Mining sensitive information to gain a privilege escalation
 
-On a server (it is much more true for a personal computer) you can find many different sensitive information like login, password, private and public keys, certificates... Theses information can be found and used to access to another machine, application or for realized a privilege escalation.
+On a server (it is much more true for a personal computer) you can find many different sensitive information like login, password, private and public keys, certificates... This information can be found and used to access another machine, application or to realize a privilege escalation.
 
-To prevent this kind of leak, you should take care of the access permission of the sensitive directories, and files. For example the directory `/home/<user>/.ssh` can normally only be read and write by the owner user (`chmod 600`) or the `/etc/shadow` file which is normally in read write for the root user and in read for the root group (`chomd 640`).
+To prevent this kind of leak, you should take care of the access permission of the sensitive directories and files. For example the directory `/home/<user>/.ssh` can normally only be read and write by the owner user (`chmod 600`) or the `/etc/shadow` file which is normally in read write for the root user and in read for the root group (`chomd 640`).
 
-It is also really important to never put any credentials in any code or configuration file. If for any reason, you have to do it, be sure the password is not in clear and the script or config file has specific permission that only allow, authorized users to read/write it.
+It is also really important to never put any credentials in any code or configuration file. If for any reason, you have to do it, be sure the password is not in clear and the script or config file has specific permission that only allow authorized users to read/write it.
 
 ## 2. Useful commands to mine credentials
 
@@ -140,7 +140,7 @@ Here some few commands which can be useful for finding credentials on a Linux sy
 
 ## 3. Useful tools to mine credentials
 
-Here few tools than can be usefull and help you in your job.
+Here are a few tools that can be helpful for your process.
 
 - [Pupy](https://github.com/n1nj4sec/pupy/)
 - [LaZagne](https://github.com/AlessandroZ/LaZagne)
@@ -150,12 +150,12 @@ Here few tools than can be usefull and help you in your job.
 
 ## 1. Sudo overview
 
-The `sudo` command give the possibility to a user to execute a command as another user (usually the root account).
+The `sudo` command makes it possible for a user to execute a command as another user (usually the root account).
 A misconfiguration of the sudo command can easily lead to a privilege escalation.
 
-To prevent it, there are few good practices:
+As a prevention method, here are few food practices:
 
-Grant the minimum privileges to perform necessary tasks or operations, be the more specific than you can. For example if you want to allow a user to listen on a specific interface (`eth0`) with `tcpdump`. You should configure `sudo` as follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root he will have to use this exact options in the same order or it will note work.
+Grant the minimum privileges to perform necessary tasks or operations, be as specific as you can. For example if you want to allow a user to listen on a specific interface (`eth0`) with `tcpdump`. You should configure `sudo` as follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root he will have to use this exact options in the same order or it will not work.
 
 Never configure `sudo` like that `user	ALL=NOPASSWD:ALL`.
 
@@ -163,7 +163,7 @@ Do not allow some commands that can permit to execute some code like `vi`, `find
 
 ## 2. Sudo information gathering
 
-Here the command you need to get some clues about your the possibilities you have to realize a privilege escalation using `sudo`.
+Here is the command you need to get some clues about the possibilities you have to realize a privilege escalation using `sudo`.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -172,7 +172,7 @@ Here the command you need to get some clues about your the possibilities you hav
 
 ## 3. Example of sudo abuse to escalate your privileges
 
-Here examples of commands an attacker can use for escalating his privileges.
+Here are examples of commands an attacker can use to escalate his privileges.
 
 \* I have found most of those commands on the blog [Le journal d'un reverser](http://0x90909090.blogspot.com/2015/07/no-one-expect-command-execution.html)
 
@@ -201,7 +201,7 @@ There are a few possibilities to realize a privilege escalation with misconfigur
 
 First, if you let the read access of a sensitive file like a private key, or a script running as daemon or in the cron.
 
-SUID (Set User ID) or SGID (Set Group ID) files must be as much as possible avoided.
+SUID (Set User ID) or SGID (Set Group ID) files must be avoided as much as possible.
 They are needed for tasks that require higher privileges than those which common users have, such as `passwd` command.
 
 ```sh
@@ -243,20 +243,20 @@ When this service is running on our server we must be very careful and follow so
 
 We must never configure a file system with `no_root_squash` which will mean that we allow the remote user to write in the server file system as root.
 
-We should specify on `/etc/hosts.allow` the allowed users fore our NFS.
+We should specify on `/etc/hosts.allow` the allowed users for our NFS.
 
-Sometime using NFS can be just replace by a [sshfs](https://linux.die.net/man/1/sshfs).
+Sometimes using NFS can be replaced by a [sshfs](https://linux.die.net/man/1/sshfs).
 
 ## 2. NFS information gathering
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
 | `nmap -sV --script=nfs-showmount <IP Server>` | This nmap script will give you the information about the NFS |
-| `showmount -e <IP Server>` | Same as the nmap script bellow but you will have to install a client `apt-get install nfs-common` |
+| `showmount -e <IP Server>` | Same as the nmap script below but you will have to install a client `apt-get install nfs-common` |
 
 ## 3. Few ideas to realize a NFS privilege escalation
 
-There is plenty of possibilities to realize a privilege escalation on a NFS, like:
+There are plenty of possibilities to realize a privilege escalation on a NFS, like:
 - create a file giving a shell with the SUID permission.
 - create or modify the file `~/.ssh/authorized_keys` with your public key.
 - set the SUID permission to a handmade script, or a binary (`/bin/sh`, `/usr/bin/vi`) which will permit to get a shell console.
@@ -268,10 +268,10 @@ There is plenty of possibilities to realize a privilege escalation on a NFS, lik
 ## 1. Cron privilege escalation overview
 
 The cron daemon schedules commands to be run at specified dates and times.
-It runs commands with specific users. So we can try to abuse it for realise a privilege escalation.
+It runs commands with specific users. So we can try to abuse it to realize a privilege escalation.
 
 A good way to abuse the cron, is to check the file permissions of the scripts it runs.
-If the permissions are not well sets, an attacker can possibly overwrite the file and easily get the privileges of the user set in the cron.
+If the permissions are not well set, an attacker can possibly overwrite the file and easily get the privileges of the user set in the cron.
 
 Another way is to use the wildcard tricks which are well explained in this article [Unix Wildcards Gone Wild](https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt)
 
@@ -281,16 +281,16 @@ Do not use the root user to set commands un the cron.
 
 ## 2. Cron information gathering
 
-Some basic command to collect some clue to realize a privilege escalation using a misconfigured cron.
+Some basic commands to collect some clues to realize a privilege escalation using a misconfigured cron.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
 | `crontab -l` | Display cron of the current user |
 | `ls -la /etc/cron*` | Display scheduled jobs overview |
 
-# IX. Other useful information which can be gathered
+# IX. Other useful information that can be gathered
 
-Those commands are really useful to collect some clue for realized a privilege escalation.
+Those commands are really useful to collect some clues to realize a privilege escalation.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
