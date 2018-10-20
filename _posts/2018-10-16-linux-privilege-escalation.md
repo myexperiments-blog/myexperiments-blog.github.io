@@ -101,7 +101,7 @@ A good practice for all your sensitive services (a service which can be accessed
 
 ## 2. Process information gathering
 
-Some basic command to collect some clue to realize a privilege escalation by passing through a vulnerable process exploitation.
+Some basic command to collect some clues to realize a privilege escalation by passing through a vulnerable process exploitation.
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
