@@ -42,7 +42,7 @@ keywords: "privilege escalation, linux, escalate, root, become root, super user"
 
 # I. Introduction
 
-When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sorts of applications or systems. This article will only describe it in the Linux system.
+When an attacker succeeds to establish the initial foothold (gain access to a user with restricted privileges), he will seek for a way to increase his privileges (Gain access to another user with more privileges). We call this action a privilege escalation. It can happen in all sorts of applications or systems.
 
 This article will give an overview of the basic Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will give a quick overview, some good practices, some information gathering commands, and an explanation the technique an attacker can use to realize a privilege escalation.
 Do not hesitate to share with us your techniques in the comments.
@@ -71,11 +71,11 @@ It is also a good practice to remove or restrict the access of all the compilers
 
 Another good practice is to limit directories that are writable or executable, particularly by service dedicated users (such as www-data for Apache).
 
-Finally, it is a really important to externalize logs in another machine.
+Finally, it is really important to externalize logs in another machine.
 
 ## 2. Kernel information gathering
 
-Some basic command to collect some clue to realize a Linux kernel exploitation
+Some basic command to collect some clues to realize a Linux kernel exploitation
 
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
@@ -153,7 +153,7 @@ Here are a few tools that can be helpful for your process.
 The `sudo` command makes it possible for a user to execute a command as another user (usually the root account).
 A misconfiguration of the sudo command can easily lead to a privilege escalation.
 
-As a prevention method, here are few food practices:
+Here are few good practices about sudo configuration:
 
 Grant the minimum privileges to perform necessary tasks or operations, be as specific as you can. For example if you want to allow a user to listen on a specific interface (`eth0`) with `tcpdump`. You should configure `sudo` as follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root he will have to use this exact options in the same order or it will not work.
 
