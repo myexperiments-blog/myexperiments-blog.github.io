@@ -155,11 +155,17 @@ A misconfiguration of the sudo command can easily lead to a privilege escalation
 
 Here are few good practices about sudo configuration:
 
-Grant the minimum privileges to perform necessary tasks or operations, be as specific as you can. For example if you want to allow a user to listen on a specific interface (`eth0`) with `tcpdump`. You should configure `sudo` as follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root he will have to use this exact options in the same order or it will not work.
+Do not allow some commands that can permit to execute some code like `vi`, `find`, `bash`, `awk`, `perl` ...
 
 Never configure `sudo` like that `user	ALL=NOPASSWD:ALL`.
 
-Do not allow some commands that can permit to execute some code like `vi`, `find`, `bash`, `awk`, `perl` ...
+Grant the minimum privileges to perform necessary tasks or operations, be as specific as you can. For example if you want to allow a user to listen on a specific interface (`eth0`) with `tcpdump`. You should configure `sudo` as follow `user ALL= (root)   NOPASSWD: /usr/sbin/tcpdump -ttteni eth0`. This configuration will permit to `user` to execute this exact command `/usr/sbin/tcpdump -ttteni eth0` as root. He will have to use this exact options in the same order or it will not work. But for this specific example it's still not the best solution, tcpdump cannot be used like that! The user you allow will need to have access to more options. So a good method to work with `tcpdump` as non root user is to not used sudo and to follow this few steps:
+
+1. create a group `groupadd pcap`
+1. add the user you want allow in this group `usermod -a -G pcap user`
+1. modify the group ownership and permission of the tcpdump binary `chgrp pcap /usr/sbin/tcpdump` and `chmod 750 /usr/sbin/tcpdump`
+1. set the CAP_NET_RAW and CAP_NET_ADMIN capabilities on the tcpdump binary to allow it to run without root access `setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump`
+1. optionally, symlink the tcpdump binary to a directory that is in the path for a normal user `ln -s /usr/sbin/tcpdump /usr/local/bin/tcpdump`
 
 ## 2. Sudo information gathering
 
@@ -184,7 +190,7 @@ Here are examples of commands an attacker can use to escalate his privileges.
 | When you execute one of theses program `less`, `more`, `nano`, `vi`, the `man`, `ftp`, `mysql`, `psql` you can execute some code into like that `!bash` | Launch a bash as root |
 | `awk 'BEGIN {system("/bin/bash")}'` | Launch a bash as root |
 | `find /home -exec /bin/bash \;` | Launch a bash as root |
-| `tcpdump -n -i lo -G1 -w /dev/null -z ./payload.sh` | Execute the program payload.sh as root |
+| `tcpdump -i lo -w /dev/null -W 1 -G 1 -z /tmp/payload.sh` | Execute the program payload.sh as root |
 | `tar c a.tar -I ./payload.sh a` | Execute the program payload.sh as root |
 | `zip z.zip a -T -TT ./payload.sh` | Execute the program payload.sh as root |
 | `man -P /tmp/payload.sh man` | Execute the program payload.sh as root |
