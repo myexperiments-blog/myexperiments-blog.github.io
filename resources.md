@@ -45,6 +45,8 @@ a Certificate Fingerprint (SHA-1 or SHA-256)
 - [Email hunter](https://hunter.io/) lets you find email addresses in seconds and connect with the people that matter for your business.
 - [Gravatar](https://en.gravatar.com/) find peoples from their avatar
 - [Cymon](https://cymon.io/) is a tracker of malware, phishing, botnets, spam, and more.
+- [datajournalism-resources](https://github.com/r3mlab/datajournalism-resources) A compilation of links to datajournalism & OSINT tools, guides and resources I find useful to keep at hand. PRs welcomed!
+- [r3mlab](https://r3mlab.github.io/) OSINT tutorials
 
 
 # Others
