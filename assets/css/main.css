@@ -8,6 +8,11 @@ body {
   margin-bottom: 40px;
 }
 
+.big-list-overflow {
+  overflow:  auto;
+  height: 300px;
+}
+
 .super-title {
   margin: 0;
   padding: 0;

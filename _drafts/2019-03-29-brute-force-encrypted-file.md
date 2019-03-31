@@ -7,7 +7,7 @@ author: Antoine Brunet
 permalink: brute-force-encrypted-file.html
 comments: true
 description: "I was solving a CTF challenge when I had to face to an encrypted file I got from a ftp I just compromised. I decided to write a quick write up about how I managed to find the cipher algorithm used to encrypt the file in the goal of brute force it."
-keywords: "brute force, openssl, CTF, challenge, writeup, encrypted file, cryptography"
+keywords: "brute force, openssl, CTF, challenge, write up, encrypted file, cryptography"
 ---
 
 # CTF context
@@ -154,6 +154,7 @@ $ ls *.enc | xargs wc -c | grep '96 '
    96 72-seed-ecb.enc
    96 72-seed.enc
 ```
+{:class="big-list-overflow"}
 
 As we can see I get some matches. Those match come from the clear text 64 bytes and the 72 bytes.
 I decided to only take the ciphers algorithms which match with the both clear text.
