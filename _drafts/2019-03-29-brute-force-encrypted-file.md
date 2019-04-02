@@ -16,7 +16,7 @@ keywords: "brute force, openssl, CTF, challenge, write up, encrypted file, crypt
 I was solving a CTF challenge when I came in contact with an encrypted file I downloaded from a FTP that I had just compromised.
 I decided to write a quick write up about how I managed to find the cipher algorithm used to encrypt the file in the goal of brute forcing it.
 
-Actually, there is no process or magic trick to truly define the cipher algorithm used from an encrypted file. What I managed to do is improve your chance to find the good one straight away (In my CTF I was super lucky, in real life things can be much more difficult).
+Actually, there is no process or magic trick to truly define the cipher algorithm used from an encrypted file. What I managed to do here is to improve your chance to find the good cipher algorithm (In my CTF I was super lucky, in real life things can be much more difficult).
 
 # Operating mode
 
@@ -70,7 +70,7 @@ $ for sample in $(seq 0 8 96); do python -c "print 'A'*$sample" > $sample; done
 ```
 
 So now let's encrypt our samples with all our cipher algorithms defined in the file `ciphers.list`.  
-I use this script for achieving this task:
+I use this script to achieve this task:
 
 ```sh
 #!/bin/bash
@@ -179,7 +179,7 @@ Now my list of cipher algorithms is reduced to only 14.
 - seed-ecb
 
 So, even if 14 is much better than 111, it is still long when you have to brute force them with a long password list.
-I decided to find the more common cipher in this list, and I choose `aes-256-cbc`. AES is clearly the most common algorithm in this list, the 256 key lengths is famous for being really secure and CBC (Cipher Block Chaining) is the default cipher used by Openssl for the AES algorithm as shown here:
+I decided to find the more common cipher in this list, and I chose `aes-256-cbc`. AES is clearly the most common algorithm in this list, the 256 key lengths is famous for being really secure and CBC (Cipher Block Chaining) is the default cipher used by Openssl for the AES algorithm as shown here:
 
 ```
 $ openssl enc -aes256 -e -in text.clear -out blabla.enc
@@ -189,7 +189,7 @@ $ openssl enc -aes256 -e -in text.clear -out blabla.enc
 
 For executing the brute force I had to install [bruteforce-salted-openssl](https://github.com/glv2/bruteforce-salted-openssl).
 
-When you use the tool, keep in mind to set the message digest to `sha256`, which is the default message digest of Openssl ([source](https://www.openssl.org/docs/man1.1.1/man1/dgst.html)). If the file has been encrypted with a different message digest our tool will be unable to know that it found a good result, so keep your fingers crossed.
+When you use the tool, keep in mind to set the message digest to `sha256`, which is the default message digest of Openssl ([source](https://www.openssl.org/docs/man1.1.1/man1/dgst.html)). If the file has been encrypted with a different message digest our tool will not know that it found a good result, so keep your fingers crossed.
 
 I used this bruteforce-salted-openssl command: `bruteforce-salted-openssl -t 15 -f rockyou.txt -c aes-256-cbc -d sha256 encrypted.enc` to brute force the file.
 
