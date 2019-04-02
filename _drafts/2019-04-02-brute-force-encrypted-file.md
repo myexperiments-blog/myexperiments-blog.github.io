@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Finding cipher algorithm of an encrypted file"
-date:   2019-03-29 15:00:00
+date:   2019-04-02 10:40:00
 tags: cryptography
 author: Antoine Brunet
 permalink: finding-cipher-algorithm-encrypted-file.html
