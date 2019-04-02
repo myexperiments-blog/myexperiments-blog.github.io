@@ -189,7 +189,7 @@ $ openssl enc -aes256 -e -in text.clear -out blabla.enc
 
 For executing the brute force I had to install [bruteforce-salted-openssl](https://github.com/glv2/bruteforce-salted-openssl).
 
-When you use the tool, keep in mind to set the message digest to `sha256`, which is the default message digest of Openssl ([source](https://www.openssl.org/docs/man1.1.1/man1/dgst.html)).
+When you use the tool, keep in mind to set the message digest to `sha256`, which is the default message digest of Openssl ([source](https://www.openssl.org/docs/man1.1.1/man1/dgst.html)). Also, you must know that bruteforce-salted-openssl will not keep the password if more than 10% of the decrypted data is not printable. It will move to the next password of the list, so this tool is unable to brute force: images (png, jpg...), videos(avi, mp4...), or other kinds of non printable files, which are apt to be encrypted by openssl.
 
 I used this bruteforce-salted-openssl command: `bruteforce-salted-openssl -t 15 -f rockyou.txt -c aes-256-cbc -d sha256 encrypted.enc` to brute force the file.
 
