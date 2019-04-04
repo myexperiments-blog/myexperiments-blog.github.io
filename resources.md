@@ -25,7 +25,11 @@ description: "Some IT Security resources"
 # OSINT
 
 - [DNSdumpster](https://dnsdumpster.com/) Find dns records in order to identify the Internet footprint of an organization
+- [Zoomeye](https://www.zoomeye.org/) Domain/IP Lookup, GeoIP, banner grabber
+- [Wigle](https://wigle.net/) GPS located Wifi
+- [Publicwww](https://publicwww.com/) Source code search engine
 - [Robtex](https://www.robtex.com/) Domain/IP Lookup
+- [Osintframework](https://osintframework.com/) OSINT framework
 - [Virustotal](https://www.virustotal.com/) Analyze suspicious files and URLs to detect types of malware, automatically share them with the security community.
 - [crt.sh](https://crt.sh/) Enter an Identity (Domain Name, Organization Name, etc),
 a Certificate Fingerprint (SHA-1 or SHA-256)
