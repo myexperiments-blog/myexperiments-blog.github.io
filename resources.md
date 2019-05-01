@@ -11,6 +11,8 @@ description: "Some IT Security resources"
 - [Quarkslab's blog](https://blog.quarkslab.com/)
 - [Le journal d'un reverser](https://0x90909090.blogspot.com/) is a cool blog about the experiments of a penetration tester.
 - [GTFOBins](https://gtfobins.github.io/) is a curated list of Unix binaries that can be exploited by an attacker to bypass local security restrictions.
+- [r57.gen](http://www.r57.gen.tr/) is a web shell collection.
+- [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) is a list of useful payloads and bypasses for Web Application Security.
 
 # Malware
 
