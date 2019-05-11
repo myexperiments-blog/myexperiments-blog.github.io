@@ -13,6 +13,7 @@ description: "Some IT Security resources"
 - [GTFOBins](https://gtfobins.github.io/) is a curated list of Unix binaries that can be exploited by an attacker to bypass local security restrictions.
 - [r57.gen](http://www.r57.gen.tr/) is a web shell collection.
 - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) is a list of useful payloads and bypasses for Web Application Security.
+- [SecLists](https://github.com/danielmiessler/SecLists) is the security tester's companion. It's a collection of multiple types of lists used during security assessments, collected in one place.
 
 # Malware
 
