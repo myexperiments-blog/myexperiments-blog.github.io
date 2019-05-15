@@ -15,6 +15,7 @@ description: "Some IT Security resources"
 - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) is a list of useful payloads and bypasses for Web Application Security.
 - [SecLists](https://github.com/danielmiessler/SecLists) is the security tester's companion. It's a collection of multiple types of lists used during security assessments, collected in one place.
 - [SQL cheat sheet](http://pentestmonkey.net/category/cheat-sheet/sql-injection) is a collection of useful syntax reminders for SQL Injection.
+- [jsfuck](http://www.jsfuck.com/) is an esoteric and educational programming style based on the atomic parts of JavaScript. It uses only six different characters to write and execute code.
 
 # Malware
 
