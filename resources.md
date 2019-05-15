@@ -16,6 +16,7 @@ description: "Some IT Security resources"
 - [SecLists](https://github.com/danielmiessler/SecLists) is the security tester's companion. It's a collection of multiple types of lists used during security assessments, collected in one place.
 - [SQL cheat sheet](http://pentestmonkey.net/category/cheat-sheet/sql-injection) is a collection of useful syntax reminders for SQL Injection.
 - [jsfuck](http://www.jsfuck.com/) is an esoteric and educational programming style based on the atomic parts of JavaScript. It uses only six different characters to write and execute code.
+- [git-dumper](https://github.com/arthaud/git-dumper) is a tool to dump a git repository from a website.
 
 # Malware
 
