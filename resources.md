@@ -63,3 +63,4 @@ a Certificate Fingerprint (SHA-1 or SHA-256)
 
 - [Awesome-pentest](https://github.com/enaqx/awesome-pentest) is a large collections of interesting security resources
 - [Shell-strom](http://shell-storm.org/shellcode) is a shellcodes database for study cases
+- [Linux-insides](https://0xax.gitbooks.io/linux-insides/content/) is an awesome book-in-progress about the linux kernel and its insides.
