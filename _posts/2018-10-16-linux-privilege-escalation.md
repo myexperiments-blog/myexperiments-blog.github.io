@@ -2,6 +2,7 @@
 layout: post
 title:  "Local Linux privilege escalation overview"
 date:   2018-10-16 09:00:00
+last_update: 2020-11-07 14:00:00
 tags: System Pentest
 author: Antoine Brunet
 permalink: linux-privilege-escalation.html
@@ -13,31 +14,32 @@ keywords: "privilege escalation, linux, escalate, root, become root, super user"
 # Summary
 
 - [I. Introduction](#i-introduction)
-- [II. Kernel](#ii-kernel)
+- [II. Tools to help doing privilege escalation](#ii-tools-to-help-doing-privilege-escalation)
+- [III. Kernel](#iii-kernel)
     - [1. Kernel privilege escalation overview](#1-kernel-privilege-escalation-overview)
     - [2. Kernel information gathering](#2-kernel-information-gathering)
-- [III. Process](#iii-process)
+- [IV. Process](#iv-process)
     - [1. Process privilege escalation overview](#1-process-privilege-escalation-overview)
     - [2. Process information gathering](#2-process-information-gathering)
-- [IV. Mining credentials information](#iv-mining-credentials-information)
+- [V. Mining credentials information](#v-mining-credentials-information)
     - [1. Mining sensitive information to gain a privilege escalation](#1-mining-sensitive-information-to-gain-a-privilege-escalation)
     - [2. Useful commands to mine credentials](#2-useful-commands-to-mine-credentials)
     - [3. Useful tools to mine credentials](#3-useful-tools-to-mine-credentials)
-- [V. Sudo](#v-sudo)
+- [VI. Sudo](#vi-sudo)
     - [1. Sudo overview](#1-sudo-overview)
     - [2. Sudo information gathering](#2-sudo-information-gathering)
     - [3. Example of sudo abuse to escalate your privileges](#3-example-of-sudo-abuse-to-escalate-your-privileges)
-- [VI. File permission](#vi-file-permission)
+- [VII. File permission](#vii-file-permission)
     - [1. File permission overview](#1-file-permission-overview)
     - [2. File permission information gathering](#2-file-permission-information-gathering)
-- [VII. Network File System](#vii-network-file-system)
+- [VIII. Network File System](#viii-network-file-system)
     - [1. NFS overview](#1-nfs-overview)
     - [2. NFS information gathering](#2-nfs-information-gathering)
     - [3. Few ideas to realize a NFS privilege escalation](#3-few-ideas-to-realize-a-nfs-privilege-escalation)
-- [VIII. Cron](#viii-cron)
+- [IX. Cron](#ix-cron)
     - [1. Cron privilege escalation overview](#1-cron-privilege-escalation-overview)
     - [2. Cron information gathering](#2-cron-information-gathering)
-- [IX. Other useful information that can be gathered](#ix-other-useful-information-that-can-be-gathered)
+- [X. Other useful information that can be gathered](#x-other-useful-information-that-can-be-gathered)
 
 
 # I. Introduction
@@ -47,9 +49,14 @@ When an attacker succeeds to establish the initial foothold (gain access to a us
 This article will give an overview of the basic Linux privilege escalation techniques. It separates the local Linux privilege escalation in different scopes: kernel, process, mining credentials, sudo, cron, NFS, and file permission. For each, it will give a quick overview, some good practices, some information gathering commands, and an explanation the technique an attacker can use to realize a privilege escalation.
 Do not hesitate to share with us your techniques in the comments.
 
-To help you to gather information you can use this script [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check).
+# II. Tools to help doing privilege escalation
 
-# II. Kernel
+There is planty of tools which can help doing privilege escalation. These ones are my favorite:
+- [linux-smart-enumeration](https://github.com/diego-treitos/linux-smart-enumeration)
+- [linuxprivchecker.py](https://github.com/sleventyeleven/linuxprivchecker/blob/master/linuxprivchecker.py)
+- [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check)
+
+# III. Kernel
 
 ## 1. Kernel privilege escalation overview
 
@@ -73,6 +80,8 @@ Another good practice is to limit directories that are writable or executable, p
 
 Finally, it is really important to externalize logs in another machine.
 
+[Center for Internet Security (CIS)](https://www.cisecurity.org/) are providing benchmarks about the best security practices to follow.
+
 ## 2. Kernel information gathering
 
 Some basic command to collect some clues to realize a Linux kernel exploitation
@@ -80,7 +89,7 @@ Some basic command to collect some clues to realize a Linux kernel exploitation
 | Command                | Result                            |
 | :-------------------- | :------------------------------- |
 | `uname -a` | Print all available system information   |
-| `uname -m` | Linux kernel architecture (32 or 64 bit) |
+| `uname -m` or `arch` | Linux kernel architecture (32 or 64 bit) |
 | `uname -r` | Kernel release |
 | `uname -n` or `hostname` | System hostname |
 | `cat /proc/version` | Kernel information |
@@ -89,7 +98,7 @@ Some basic command to collect some clues to realize a Linux kernel exploitation
 | `df -a` | File system information |
 | `dpkg --list 2>/dev/null| grep compiler |grep -v decompiler 2>/dev/null && yum list installed 'gcc*' 2>/dev/null| grep gcc 2>/dev/null` | List available compilers |
 
-# III. Process
+# IV. Process
 
 ## 1. Process privilege escalation overview
 
@@ -117,7 +126,7 @@ Some basic command to collect some clues to realize a privilege escalation by pa
 | `mysql --version` | MYSQL version |
 | `psql -V` | Postgres version |
 
-# IV. Mining credentials information
+# V. Mining credentials information
 
 ## 1. Mining sensitive information to gain a privilege escalation
 
@@ -146,7 +155,7 @@ Here are a few tools that can be helpful for your process.
 - [LaZagne](https://github.com/AlessandroZ/LaZagne)
 - [gimmecredz](https://github.com/0xmitsurugi/gimmecredz)
 
-# V. Sudo
+# VI. Sudo
 
 ## 1. Sudo overview
 
@@ -199,7 +208,7 @@ Here are examples of commands an attacker can use to escalate his privileges.
 | `ls -la .bashrc` `export HOME=.` `bash` | Launch a bash as root |
 | `nmap --interactive` `!bash` | Launch a bash as root |
 
-# VI. File permission
+# VII. File permission
 
 ## 1. File permission overview
 
@@ -227,7 +236,7 @@ Some basic commands to collect some clues to realize a privilege escalation abus
 | `find / -uid 0 -perm -4000 -type f 2>/dev/null` | Find SUID files owned by root |
 | `find / -perm -2000 -type f 2>/dev/null` | Find SGID files (sticky bit) |
 | `find / ! -path "*/proc/*" -perm -2 -type f -print 2>/dev/null` | Find world-writeable files excluding `proc` file |
-| `find / -type f '(' -name *.cert -or -name *.crt -or -name *.pem -or -name *.ca -or -name *.p12 -or -name *.cer -name *.der ')' '(' '(' -user support -perm -u=r ')' -or '(' -group support -perm -g=r ')' -or '(' -perm -o=r ')' ')' 2> /dev/null-or -name *.cer -name *.der ')' 2> /dev/null` | Find keys or certificates you can read |
+| `find / -type f '(' -name *.cert -or -name *.crt -or -name *.pem -or -name *.ca -or -name *.p12 -or -name *.cer -name *.der ')' '(' '(' -user support -perm -u=r ')' -or '(' -group support -perm -g=r ')' -or '(' -perm -o=r ')' ')' -or -name *.cer -name *.der ')' 2> /dev/null` | Find keys or certificates you can read |
 | `find /home –name *.rhosts -print 2>/dev/null` | Find rhost config files |
 | `find /etc -iname hosts.equiv -exec ls -la {} 2>/dev/null ; -exec cat {} 2>/dev/null ;` | Find hosts.equiv, list permissions and cat the file contents |
 | `cat ~/.bash_history` | Display current user history |
@@ -236,7 +245,7 @@ Some basic commands to collect some clues to realize a privilege escalation abus
 | `find /etc -maxdepth 1 -name '*.conf' -type f` or `ls -la /etc/*.conf` | List the configuration files in /etc (depth 1, modify the maxdepth param in the first command for change it) |
 | `lsof | grep '/home/\|/etc/\|/opt/'` | Display the possibly interesting openfiles |
 
-# VII. Network File System
+# VIII. Network File System
 
 ## 1. NFS overview
 
@@ -269,7 +278,7 @@ There are plenty of possibilities to realize a privilege escalation on a NFS, li
 - modify the `/etc/shadow` and the `/etc/passwd` to create a new user or to change the password of one already existing.
 - modify the `sudo` configuration file
 
-# VIII. Cron
+# IX. Cron
 
 ## 1. Cron privilege escalation overview
 
@@ -294,7 +303,7 @@ Some basic commands to collect some clues to realize a privilege escalation usin
 | `crontab -l` | Display cron of the current user |
 | `ls -la /etc/cron*` | Display scheduled jobs overview |
 
-# IX. Other useful information that can be gathered
+# X. Other useful information that can be gathered
 
 Those commands are really useful to collect some clues to realize a privilege escalation.
 
