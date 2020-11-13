@@ -140,12 +140,12 @@ You have two ways to create those interfaces:
 First, you can create interfaces with `ifconfig` but after a reboot you will have to recreate them with the same command set.
 
 ```
-ifconfig vether1 10.8.2.254/24 rdomain 1 up
+ifconfig vether1 10.8.1.254/24 rdomain 1 up
 ifconfig tap1 rdomain 1 up
 ifconfig bridge1 rdomain1 up
 ifconfig bridge1 add tap1
 ifconfig bridge1 add vether1
-route -T 1 add default 10.8.2.254
+route -T 1 add default 10.8.1.254
 ```
 
 Second, you can make them persistent to a reboot by creating the hostname file and adding their configurations.
@@ -153,8 +153,8 @@ Second, you can make them persistent to a reboot by creating the hostname file a
 Create the file `/etc/hostname.vether1` with the following content:
 ```
 rdomain 1
-inet 10.8.2.254/24
-!route -T 2 add  default 10.8.2.254
+inet 10.8.1.254/24
+!route -T 1 add  default 10.8.1.254
 up
 ```
 
@@ -166,9 +166,9 @@ up
 
 Create the file `/etc/hostname.bridge1` with the following content:
 ```
-rdomain 2
-add vether2
-add tap2
+rdomain 1
+add vether1
+add tap1
 up
 ```
 
@@ -183,8 +183,8 @@ pass out all keep state
 pass proto tcp to port 22
 match in all scrub (no-df random-id)
 pass proto udp to port 44101
-pass in quick on vether2 inet proto tcp to !(vether2) rtable 0 rdr-to 127.0.0.1 port 9040
-pass in quick on vether2 inet proto udp to port domain rtable 0 rdr-to 127.0.0.1 port domain
+pass in quick on vether1 inet proto tcp to !(vether1) rtable 0 rdr-to 127.0.0.1 port 9040
+pass in quick on vether1 inet proto udp to port domain rtable 0 rdr-to 127.0.0.1 port domain
 ```
 
 ### c - Let's do some checks
