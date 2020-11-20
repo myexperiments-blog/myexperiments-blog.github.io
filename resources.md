@@ -58,7 +58,7 @@ a Certificate Fingerprint (SHA-1 or SHA-256)
 - [datajournalism-resources](https://github.com/r3mlab/datajournalism-resources) A compilation of links to datajournalism & OSINT tools, guides and resources I find useful to keep at hand. PRs welcomed!
 - [r3mlab](https://r3mlab.github.io/) OSINT tutorials
 
-# Reverse engineering
+# Reverse Engineering
 
 - [Maddie Stone - (Blog)](https://maddiestone.github.io/AndroidAppRE/app_fundamentals.html) introduction to Android applications reverse engineering
 
