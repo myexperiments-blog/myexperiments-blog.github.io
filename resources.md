@@ -23,6 +23,7 @@ description: "Some IT Security resources"
 - [TheZoo](https://github.com/ytisf/theZoo/tree/master/malwares/Source) : Many malware source code
 - [Malwaretech](https://www.malwaretech.com/) : Some great articles about IT Security and more specificly about malware analysis.
 - [Myexperimentswithmalware](http://myexperimentswithmalware.blogspot.com/) : A blog about malware analysis
+- [Suterusu](https://github.com/mncoppola/suterusu) : Linux Rootkit
 
 # Botnets
 
